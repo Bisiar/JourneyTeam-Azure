@@ -70,19 +70,12 @@ This repository provides comprehensive guides and sample applications to help de
       - [Entra ID Integration](#entra-id-integration)
       - [Configuration](#configuration-1)
   - [Samples](#samples)
-    - [Available Samples](#available-samples)
-  - [Plain JavaScript Application using MSAL.js](#plain-javascript-application-using-msaljs)
-    - [Overview](#overview-1)
-  - [React Application using MSAL React](#react-application-using-msal-react)
-    - [Overview](#overview-2)
-  - [Java Application using MSAL4J](#java-application-using-msal4j)
-    - [Overview](#overview-3)
-    - [Creating the JavaWebAppMSAL Application](#creating-the-javawebappmsal-application)
-      - [Prerequisites](#prerequisites-1)
-      - [Step-by-Step Instructions](#step-by-step-instructions)
-      - [Notes](#notes)
-      - [Additional Resources](#additional-resources)
-  - [Additional Resources](#additional-resources-1)
+    - [Plain JavaScript Application using MSAL.js](#plain-javascript-application-using-msaljs)
+    - [React Application using MSAL React](#react-application-using-msal-react)
+    - [Java Application using MSAL4J](#java-application-using-msal4j)
+
+  - [Additional Resources](#additional-resources)
+
   - [Acknowledgments](#acknowledgments)
 
 ---
@@ -163,7 +156,7 @@ Microsoft Entra ID supports several authentication patterns to accommodate vario
 
 OIDC is a simple identity layer on top of the OAuth 2.0 protocol. It allows clients to verify the identity of the end-user based on the authentication performed by an authorization server.
 
-#### Steps to Integrate with OIDC:
+#### Steps to Integrate with OIDC
 
 1. **Register your application in Entra ID**.
 2. **Configure application settings**.
@@ -391,7 +384,7 @@ A detailed Java example is provided in the [Samples](#samples) section.
 
 SAML allows service providers and identity providers to securely exchange user authentication and authorization data.
 
-#### Steps to Integrate with SAML:
+#### Steps to Integrate with SAML
 
 1. **Register your application for SAML in Entra ID**.
 2. **Configure the SAML settings in your application**.
@@ -1173,57 +1166,20 @@ APIM allows you to publish APIs to internal and external consumers securely.
 
 The `Samples` folder contains sample applications demonstrating how to integrate with Microsoft Entra ID using various languages and frameworks.
 
-### Available Samples
+- ### Plain JavaScript Application using MSAL.js
 
-- **Plain JavaScript Application using MSAL.js**
   - **Folder**: [`Samples/JavaScriptSinglePageApp`](Samples/JavaScriptSinglePageApp)
   - **Description**: A simple single-page application using vanilla JavaScript and the MSAL.js library to authenticate users with Microsoft Entra ID.
 
-- **React Application using MSAL React**
+- ### React Application using MSAL React
+
   - **Folder**: [`Samples/ReactSinglePageApp`](Samples/ReactSinglePageApp)
   - **Description**: A React application that utilizes the MSAL React library for authenticating users with Microsoft Entra ID.
 
-- **Java Application using MSAL4J**
+- ### Java Application using MSAL4J
+
   - **Folder**: [`Samples/JavaWebAppMSAL`](Samples/JavaWebAppMSAL)
   - **Description**: A Java Spring Boot application demonstrating authentication with Microsoft Entra ID using MSAL4J.
-
----
-
-## Plain JavaScript Application using MSAL.js
-
-**Folder**: [`Samples/JavaScriptSinglePageApp`](Samples/JavaScriptSinglePageApp)
-
-### Overview
-
-A simple single-page application using vanilla JavaScript and the **MSAL.js** library to authenticate users with Microsoft Entra ID. It demonstrates how to sign in users and display basic user information.
-
-*Instructions for setting up and running the application are provided in the folder's README.*
-
----
-
-## React Application using MSAL React
-
-**Folder**: [`Samples/ReactSinglePageApp`](Samples/ReactSinglePageApp)
-
-### Overview
-
-A React application that utilizes the MSAL React library for authenticating users with Microsoft Entra ID. Shows how to implement authentication flows, manage user sessions, and display user data in a React app.
-
-*Instructions for setting up and running the application are provided in the folder's README.*
-
----
-
-## Java Application using MSAL4J
-
-**Folder**: [`Samples/JavaWebAppMSAL`](Samples/JavaWebAppMSAL)
-
-### Overview
-
-A Java web application built with Spring Boot that demonstrates how to authenticate users with Microsoft Entra ID using the MSAL for Java (MSAL4J) library.
-
-*Instructions for setting up and running the application are provided in the folder's README.*
-
-
 
 ---
 
