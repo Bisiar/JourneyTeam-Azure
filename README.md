@@ -43,10 +43,46 @@ This repository provides comprehensive guides and sample applications to help de
   - [Onboarding Your Application](#onboarding-your-application)
     - [Steps to Onboard Your Application](#steps-to-onboard-your-application)
   - [Best Practices for Integrating with Microsoft Entra ID](#best-practices-for-integrating-with-microsoft-entra-id)
+    - [1. Utilize Official Libraries and SDKs](#1-utilize-official-libraries-and-sdks)
+    - [2. Securely Manage Secrets and Certificates](#2-securely-manage-secrets-and-certificates)
+    - [3. Adhere to Security Principles](#3-adhere-to-security-principles)
+    - [4. Implement Robust Error Handling](#4-implement-robust-error-handling)
+    - [5. Optimize User Experience](#5-optimize-user-experience)
+    - [6. Compliance and Governance](#6-compliance-and-governance)
+    - [7. Testing and Validation](#7-testing-and-validation)
+    - [8. Leverage Entra ID Features](#8-leverage-entra-id-features)
+    - [9. Scalability and Performance](#9-scalability-and-performance)
+    - [10. Use Managed Identities](#10-use-managed-identities)
   - [Azure Hosting Scenarios](#azure-hosting-scenarios)
+    - [Overview](#overview)
+    - [1. Azure App Service Authentication](#1-azure-app-service-authentication)
+      - [Key Features](#key-features)
+      - [Configuration Steps](#configuration-steps)
+      - [Code Example (Accessing User Claims)](#code-example-accessing-user-claims)
+    - [2. Azure Functions Authentication](#2-azure-functions-authentication)
+      - [Steps](#steps)
+    - [3. Azure Application Gateway with Entra ID Integration](#3-azure-application-gateway-with-entra-id-integration)
+      - [Scenarios](#scenarios)
+      - [Configuration](#configuration)
+    - [4. Azure Front Door Service](#4-azure-front-door-service)
+      - [Steps](#steps-1)
+    - [5. Azure API Management (APIM)](#5-azure-api-management-apim)
+      - [Entra ID Integration](#entra-id-integration)
+      - [Configuration](#configuration-1)
   - [Samples](#samples)
     - [Available Samples](#available-samples)
-  - [Additional Resources](#additional-resources)
+  - [Plain JavaScript Application using MSAL.js](#plain-javascript-application-using-msaljs)
+    - [Overview](#overview-1)
+  - [React Application using MSAL React](#react-application-using-msal-react)
+    - [Overview](#overview-2)
+  - [Java Application using MSAL4J](#java-application-using-msal4j)
+    - [Overview](#overview-3)
+    - [Creating the JavaWebAppMSAL Application](#creating-the-javawebappmsal-application)
+      - [Prerequisites](#prerequisites-1)
+      - [Step-by-Step Instructions](#step-by-step-instructions)
+      - [Notes](#notes)
+      - [Additional Resources](#additional-resources)
+  - [Additional Resources](#additional-resources-1)
   - [Acknowledgments](#acknowledgments)
 
 ---
@@ -928,13 +964,208 @@ Integrating your application with Microsoft Entra ID involves several steps to e
 
 ## Best Practices for Integrating with Microsoft Entra ID
 
-*(Please refer to the detailed Best Practices section in the guide for comprehensive recommendations.)*
+When integrating applications with Microsoft Entra ID, following best practices ensures secure, efficient, and maintainable solutions. Below are recommended practices your development teams should consider:
+
+### 1. Utilize Official Libraries and SDKs
+
+- **Use Microsoft Authentication Libraries (MSAL)**: MSAL provides a consistent and reliable way to integrate with Entra ID across different platforms.
+- **Stay Updated**: Regularly update libraries and dependencies to benefit from security patches and new features.
+- **Avoid Deprecated APIs**: Use the latest APIs and protocols (e.g., OIDC over OAuth 2.0) and avoid using deprecated ones.
+
+### 2. Securely Manage Secrets and Certificates
+
+- **Never Hardcode Secrets**: Do not store client secrets, certificates, or keys in source code or configuration files checked into source control.
+- **Use Secure Secret Storage**:
+  - **Azure Key Vault**: Store secrets, keys, and certificates securely.
+  - **Environment Variables**: Use secured environment variables in deployment environments.
+- **Rotate Secrets Regularly**: Implement a process for regularly rotating secrets and certificates.
+
+### 3. Adhere to Security Principles
+
+- **Principle of Least Privilege**: Assign the minimal necessary permissions to applications and users.
+- **Validate Tokens**:
+  - Verify token signatures and issuer.
+  - Check token expiration (`exp` claim).
+  - Validate token audience (`aud` claim).
+- **Protect Against Common Threats**:
+  - Implement CSRF protection.
+  - Validate all inputs to prevent injection attacks.
+  - Ensure redirect URIs are properly validated.
+
+### 4. Implement Robust Error Handling
+
+- **User-Friendly Messages**: Display generic error messages to end-users without exposing sensitive details.
+- **Logging**:
+  - Log errors and exceptions with sufficient detail for troubleshooting.
+  - Avoid logging sensitive information like access tokens or personal data.
+- **Monitoring**: Use logging and monitoring tools to detect and respond to authentication issues.
+
+### 5. Optimize User Experience
+
+- **Single Sign-On (SSO)**: Implement SSO to provide seamless access across multiple applications.
+- **Session Management**:
+  - Properly manage session timeouts.
+  - Handle session revocation appropriately.
+
+### 6. Compliance and Governance
+
+- **Regulatory Compliance**: Ensure your authentication implementation complies with data protection regulations like GDPR or HIPAA.
+- **Documentation**: Maintain up-to-date documentation of authentication flows, configurations, and dependencies.
+
+### 7. Testing and Validation
+
+- **Automated Testing**: Include authentication flows in your automated testing.
+- **Security Testing**:
+  - Conduct regular security assessments and penetration testing.
+  - Use tools to scan for vulnerabilities in your authentication implementation.
+
+### 8. Leverage Entra ID Features
+
+- **Conditional Access**:
+  - Implement Conditional Access policies for enhanced security.
+- **Multi-Factor Authentication (MFA)**:
+  - Require MFA for sensitive operations or roles.
+- **Identity Protection**:
+  - Utilize Entra ID's identity protection features to detect and remediate identity-based risks.
+
+### 9. Scalability and Performance
+
+- **Token Caching**: Cache tokens appropriately to reduce latency and network calls.
+- **Asynchronous Calls**: Use asynchronous programming models where applicable.
+- **Load Testing**: Perform load testing to ensure the authentication system can handle expected traffic.
+
+### 10. Use Managed Identities
+
+- **Azure Managed Identities**:
+  - Use Managed Service Identity (MSI) to let Azure manage the identity of applications, avoiding manual secret management.
+  - This is particularly useful when accessing Azure resources like Key Vault, Storage Accounts, etc.
 
 ---
 
 ## Azure Hosting Scenarios
 
-*(Please refer to the detailed Azure Hosting Scenarios section in the guide for comprehensive information.)*
+Hosting applications on Azure provides seamless integration with Entra ID and leverages Azure services to enhance security and scalability.
+
+### Overview
+
+- **Integrated Authentication**: Azure services like App Service and Azure Functions provide built-in authentication capabilities.
+- **Managed Services**: Offload infrastructure and identity management to Azure services to focus on application logic.
+- **Scalability and Reliability**: Azure provides automatic scaling and high availability options.
+
+### 1. Azure App Service Authentication
+
+Azure App Service offers built-in authentication and authorization capabilities (also known as **Easy Auth**).
+
+#### Key Features
+
+- **Zero Code Changes**: Implement authentication without modifying your application code.
+- **Multiple Identity Providers**: Supports Entra ID, Facebook, Google, Twitter, and Microsoft Accounts.
+- **Token Store**: Automatically stores tokens for authenticated users.
+
+#### Configuration Steps
+
+1. **Enable Authentication**:
+   - Go to your App Service in the Azure portal.
+   - Under **Settings**, select **Authentication/Authorization**.
+   - Turn on **App Service Authentication**.
+
+2. **Configure Identity Provider**:
+   - Choose **Log in with Azure Active Directory**.
+   - Configure the Azure Active Directory settings:
+     - **Express**: Quick setup with default settings.
+     - **Advanced**: Custom configuration.
+   - Provide necessary details like Client ID and Issuer URL.
+
+3. **Access User Claims**:
+   - User claims are available in HTTP headers.
+   - Verify the header `X-MS-CLIENT-PRINCIPAL`.
+
+#### Code Example (Accessing User Claims)
+
+**C# (ASP.NET Core)**:
+
+```csharp
+// Inside a controller action or middleware
+var principalHeader = Request.Headers["X-MS-CLIENT-PRINCIPAL"];
+if (!StringValues.IsNullOrEmpty(principalHeader))
+{
+    var decoded = Convert.FromBase64String(principalHeader);
+    var json = Encoding.UTF8.GetString(decoded);
+    var principal = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+    // Access user details from the principal dictionary
+}
+```
+
+---
+
+### 2. Azure Functions Authentication
+
+Azure Functions can also leverage Easy Auth for securing serverless functions.
+
+#### Steps
+
+- **Enable Authentication**: Similar to App Service, enable authentication in the Azure portal.
+- **Set Authorization Level**: In your function, set the authorization level to `Function`, `Anonymous`, or `Admin` as required.
+- **Access User Information**: Use the same method to access user claims via headers.
+
+---
+
+### 3. Azure Application Gateway with Entra ID Integration
+
+Azure Application Gateway can provide authentication through integration with Entra ID.
+
+#### Scenarios
+
+- **Centralized Authentication**: Offload authentication to the gateway for all backend services.
+- **Web Application Firewall (WAF)**: Protect against common web vulnerabilities.
+
+#### Configuration
+
+1. **Create an Application Gateway**:
+   - Configure frontend IP, listeners, and backend pools.
+
+2. **Set Up OAuth 2.0 Authentication**:
+   - In the HTTP settings, enable **Azure Active Directory** authentication.
+   - Provide client ID and client secret of your Entra ID application.
+
+3. **Backend Configuration**:
+   - Ensure backend services accept traffic from the gateway.
+   - Remove authentication logic from backend if offloading to the gateway.
+
+---
+
+### 4. Azure Front Door Service
+
+Azure Front Door offers global load balancing and can integrate with Entra ID for authentication.
+
+#### Steps
+
+- **Enable Forwarding**: Configure Front Door to forward requests to your backend services.
+- **Integrate with Entra ID**:
+  - Use **Azure Front Door Standard/Premium** with **Private Link** and WAF policies.
+  - Configure custom domain and SSL certificates.
+- **Implement Custom Authentication**:
+  - Since Front Door doesn't natively support Entra ID authentication, implement authentication at the backend or use a custom solution.
+
+---
+
+### 5. Azure API Management (APIM)
+
+APIM allows you to publish APIs to internal and external consumers securely.
+
+#### Entra ID Integration
+
+- **Authentication Policies**: Use built-in policies to enforce Entra ID authentication for API access.
+- **Developer Portal**: Customize the portal to require Entra ID sign-in for developers.
+
+#### Configuration
+
+1. **Register an Application in Entra ID**: For APIM to use.
+2. **Configure OAuth 2.0** Settings in APIM:
+   - Set up the OAuth 2.0 authorization server in APIM.
+   - Reference the authorization server in API policies.
+3. **Apply Authentication Policies**:
+   - Use `validate-jwt` policy to enforce token validation.
 
 ---
 
@@ -955,6 +1186,44 @@ The `Samples` folder contains sample applications demonstrating how to integrate
 - **Java Application using MSAL4J**
   - **Folder**: [`Samples/JavaWebAppMSAL`](Samples/JavaWebAppMSAL)
   - **Description**: A Java Spring Boot application demonstrating authentication with Microsoft Entra ID using MSAL4J.
+
+---
+
+## Plain JavaScript Application using MSAL.js
+
+**Folder**: [`Samples/JavaScriptSinglePageApp`](Samples/JavaScriptSinglePageApp)
+
+### Overview
+
+A simple single-page application using vanilla JavaScript and the **MSAL.js** library to authenticate users with Microsoft Entra ID. It demonstrates how to sign in users and display basic user information.
+
+*Instructions for setting up and running the application are provided in the folder's README.*
+
+---
+
+## React Application using MSAL React
+
+**Folder**: [`Samples/ReactSinglePageApp`](Samples/ReactSinglePageApp)
+
+### Overview
+
+A React application that utilizes the MSAL React library for authenticating users with Microsoft Entra ID. Shows how to implement authentication flows, manage user sessions, and display user data in a React app.
+
+*Instructions for setting up and running the application are provided in the folder's README.*
+
+---
+
+## Java Application using MSAL4J
+
+**Folder**: [`Samples/JavaWebAppMSAL`](Samples/JavaWebAppMSAL)
+
+### Overview
+
+A Java web application built with Spring Boot that demonstrates how to authenticate users with Microsoft Entra ID using the MSAL for Java (MSAL4J) library.
+
+*Instructions for setting up and running the application are provided in the folder's README.*
+
+
 
 ---
 
