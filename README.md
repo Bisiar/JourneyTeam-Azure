@@ -949,8 +949,8 @@ graph TD
     A --> C[Updating]
     A --> D[Deprovisioning]
     B --> E[Manual Provisioning]
-    B --> F[Automated Provisioning (SCIM)]
-    C --> G[Just-in-Time (JIT)]
+    B --> F[Automated SCIM]
+    C --> G[Just-in-Time JIT]
     D --> H[LDAP Integration]
 ```
 
