@@ -948,9 +948,9 @@ graph TD
     A[User Lifecycle Management] --> B[Provisioning]
     A --> C[Updating]
     A --> D[Deprovisioning]
-    B --> E[Manual]
-    B --> F[Automated (SCIM)]
-    C --> G[JIT Provisioning]
+    B --> E[Manual Provisioning]
+    B --> F[Automated Provisioning (SCIM)]
+    C --> G[Just-in-Time (JIT)]
     D --> H[LDAP Integration]
 ```
 
