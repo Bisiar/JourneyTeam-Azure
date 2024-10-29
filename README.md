@@ -1219,7 +1219,6 @@ graph TB
   - **Azure.Identity**: Simplifies authentication across Azure SDKs using Managed Identity, Service Principal, and other mechanisms.
   - **Active Directory Authentication Library (ADAL)**: Older library for authentication with Azure Active Directory, primarily for legacy applications (consider migrating to MSAL).
 
-- **Stay Updated**: Regularly update libraries and dependencies to benefit from security patches and new features.
 - **Avoid Deprecated APIs**: Use the latest APIs and protocols (e.g., OIDC over OAuth 2.0) and avoid using deprecated ones.
 
 - **Stay Updated**: Regularly update libraries and dependencies to benefit from security patches and new features.
