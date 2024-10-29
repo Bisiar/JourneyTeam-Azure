@@ -1,22 +1,13 @@
 # Microsoft Entra ID Integration Guide
 
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
+[![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://ansicolortags.readthedocs.io/?badge=latest)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/your/repo/graphs/commit-activity)
+
 This repository provides comprehensive guides and sample applications to help development teams integrate their applications with **Microsoft Entra ID** (formerly Azure Active Directory) using various authentication protocols.
 
 ---
 
-```mermaid
-flowchart TD
-    A[Client Application]
-    B[Microsoft Entra ID]
-    C[Protected Resource]
-    A -->|1. Auth Request| B
-    B -->|2. Auth Response| A
-    A -->|3. Token Request| B
-    B -->|4. Access Token| A
-    A -->|5. API Request + Token| C
-    C -->|6. Response| A
-```
----
 ## Table of Contents
 
 - [Microsoft Entra ID Integration Guide](#microsoft-entra-id-integration-guide)
@@ -29,13 +20,14 @@ flowchart TD
   - [Authentication Patterns](#authentication-patterns)
     - [Common Authentication Patterns](#common-authentication-patterns)
     - [OpenID Connect (OIDC) Integration](#openid-connect-oidc-integration)
-      - [Steps to Integrate with OIDC:](#steps-to-integrate-with-oidc)
+      - [Steps to Integrate with OIDC](#steps-to-integrate-with-oidc)
+      - [Java OIDC Integration Example](#java-oidc-integration-example)
       - [C# OIDC Integration Example](#c-oidc-integration-example)
       - [JavaScript OIDC Integration Example](#javascript-oidc-integration-example)
       - [Python OIDC Integration Example](#python-oidc-integration-example)
-      - [Java OIDC Integration Example](#java-oidc-integration-example)
     - [SAML Integration](#saml-integration)
-      - [Steps to Integrate with SAML:](#steps-to-integrate-with-saml)
+      - [Steps to Integrate with SAML](#steps-to-integrate-with-saml)
+      - [Java SAML Integration Example](#java-saml-integration-example)
       - [C# SAML Integration Example](#c-saml-integration-example)
       - [JavaScript SAML Integration Example](#javascript-saml-integration-example)
       - [Python SAML Integration Example](#python-saml-integration-example)
@@ -45,6 +37,7 @@ flowchart TD
     - [Common Authorization Strategies](#common-authorization-strategies)
     - [Implementing Authorization](#implementing-authorization)
     - [Examples](#examples)
+      - [Java (Spring Boot)](#java-spring-boot)
       - [C# (ASP.NET Core)](#c-aspnet-core)
       - [JavaScript (Node.js with Express)](#javascript-nodejs-with-express)
   - [User Lifecycle Management](#user-lifecycle-management)
@@ -96,6 +89,17 @@ This guide aims to help you understand how to integrate your applications with M
 
 Understanding the key terms in Microsoft Entra ID is crucial for successful integration.
 
+```mermaid
+graph TD
+    A[Microsoft Entra ID] --> B[App Registration]
+    A --> C[Enterprise Application]
+    A --> D[User Directory]
+    B --> E[Client ID & Client Secret]
+    C --> F[Access Policies]
+    D --> G[User Accounts]
+    D --> H[Groups]
+```
+
 - **Tenant**: A dedicated instance of Entra ID that an organization receives when it signs up for a Microsoft cloud service.
 - **Directory**: Contains all of the organization's user accounts, groups, and app registrations.
 - **App Registration**: An identity configuration for your application, allowing it to authenticate and request resources.
@@ -108,22 +112,33 @@ Understanding the key terms in Microsoft Entra ID is crucial for successful inte
 
 ### Enterprise Applications vs. App Registrations
 
-- **App Registration**:
-  - Represents the application's identity configuration.
-  - Configured by developers.
-  - Defines how the application integrates with Entra ID.
+#### App Registration
 
-- **Enterprise Application**:
-  - Represents an instance of the application within a tenant.
-  - Used for managing access, single sign-on, and user assignments.
-  - Configured by IT administrators.
+- Represents the application's identity configuration.
+- Configured by developers.
+- Defines how the application integrates with Entra ID.
+
+#### Enterprise Application
+
+- Represents an instance of the application within a tenant.
+- Used for managing access, single sign-on, and user assignments.
+- Configured by IT administrators.
 
 ---
 
 ## Authentication vs. Authorization
 
-- **Authentication**: The process of verifying the identity of a user or system. It's about ensuring that the entity is who they claim to be.
-  - **Example**: Logging in with a username and password, or via single sign-on using Entra ID.
+```mermaid
+graph TD
+    A[Authentication] --> B[User Verifies Identity]
+    B --> C[Access Token Granted]
+    C --> D[User Gains Access]
+    E[Authorization] --> F[Access Rights Checked]
+    F --> D
+```
+
+- **Authentication**: The process of verifying the identity of a user or system. It’s about ensuring that the entity is who they claim to be.
+  - **Example**: Logging in with a username and password or via single sign-on using Entra ID.
 
 - **Authorization**: The process of determining whether an authenticated user has access to specific resources or actions.
   - **Example**: Checking if a user has the 'Admin' role before allowing access to an admin dashboard.
@@ -157,18 +172,68 @@ OIDC is a simple identity layer on top of the OAuth 2.0 protocol. It allows clie
 2. **Configure application settings**.
 3. **Implement authentication logic**.
 
+#### Java OIDC Integration Example
+
+**Using MSAL4J**
+
+1. **Add MSAL4J to your project**:
+
+   ```xml
+   <!-- Add this dependency in your pom.xml -->
+   <dependency>
+       <groupId>com.microsoft.azure</groupId>
+       <artifactId>msal4j</artifactId>
+       <version>1.10.1</version>
+   </dependency>
+   ```
+
+2. **Configure OIDC settings**:
+
+   ```java
+   public class AuthConfig {
+       private static final String CLIENT_ID = "your-client-id";
+       private static final String CLIENT_SECRET = "your-client-secret";
+       private static final String AUTHORITY = "https://login.microsoftonline.com/your-tenant-id";
+       private static final String REDIRECT_URI = "http://localhost:8080/auth";
+
+       // Add your configuration methods here
+   }
+   ```
+
+3. **Implement Authentication Logic**:
+
+   ```java
+   import com.microsoft.aad.msal4j.*;
+
+   public class OIDCAuthExample {
+
+       public static void main(String[] args) throws Exception {
+           ConfidentialClientApplication app = ConfidentialClientApplication.builder(CLIENT_ID,
+                   ClientCredentialFactory.createFromSecret(CLIENT_SECRET))
+                   .authority(AUTHORITY)
+                   .build();
+
+           IAuthenticationResult result = app.acquireToken(AuthorizationCodeParameters
+                   .builder("authorization-code", new URI(REDIRECT_URI))
+                   .build()).get();
+
+           System.out.println("Access Token: " + result.accessToken());
+       }
+   }
+   ```
+
 #### C# OIDC Integration Example
 
 **Using ASP.NET Core and `Microsoft.Identity.Web`**
 
-1. **Install NuGet Packages**
+1. **Install NuGet Packages**:
 
    ```bash
    dotnet add package Microsoft.Identity.Web
    dotnet add package Microsoft.Identity.Web.UI
    ```
 
-2. **Configure `appsettings.json`**
+2. **Configure `appsettings.json`**:
 
    ```json
    {
@@ -182,7 +247,7 @@ OIDC is a simple identity layer on top of the OAuth 2.0 protocol. It allows clie
    }
    ```
 
-3. **Update `Startup.cs`**
+3. **Update `Startup.cs`**:
 
    ```csharp
    using Microsoft.Identity.Web;
@@ -211,7 +276,7 @@ OIDC is a simple identity layer on top of the OAuth 2.0 protocol. It allows clie
    }
    ```
 
-4. **Protect Your Controllers**
+4. **Protect Your Controllers**:
 
    ```csharp
    using Microsoft.AspNetCore.Authorization;
@@ -226,19 +291,17 @@ OIDC is a simple identity layer on top of the OAuth 2.0 protocol. It allows clie
    }
    ```
 
----
-
 #### JavaScript OIDC Integration Example
 
 **Using Node.js and Passport.js**
 
-1. **Install Dependencies**
+1. **Install Dependencies**:
 
    ```bash
    npm install express passport passport-azure-ad express-session
    ```
 
-2. **Configure `app.js`**
+2. **Configure `app.js`**:
 
    ```javascript
    const express = require('express');
@@ -385,17 +448,69 @@ SAML allows service providers and identity providers to securely exchange user a
 2. **Configure the SAML settings in your application**.
 3. **Implement the SAML authentication flow**.
 
+#### Java SAML Integration Example
+
+**Using `java-saml` library**
+
+1. **Add Dependency**:
+
+   ```xml
+   <dependency>
+       <groupId>com.onelogin</groupId>
+       <artifactId>java-saml</artifactId>
+       <version>2.5.0</version>
+   </dependency>
+   ```
+
+2. **Configure SAML Settings**:
+
+   ```java
+   import com.onelogin.saml2.Auth;
+   import com.onelogin.saml2.settings.Saml2Settings;
+   import com.onelogin.saml2.util.Util;
+
+   public class SamlConfig {
+       private static final String IDP_METADATA_URL = "https://login.microsoftonline.com/your-tenant-id/federationmetadata/2007-06/federationmetadata.xml";
+
+       public static Saml2Settings configureSaml() throws Exception {
+           // Configure SAML settings
+           Saml2Settings settings = Util.loadSettings(IDP_METADATA_URL);
+           return settings;
+       }
+   }
+   ```
+
+3. **Implement SAML Authentication**:
+
+   ```java
+   public class SamlAuthExample {
+       public static void main(String[] args) throws Exception {
+           Saml2Settings settings = SamlConfig.configureSaml();
+           Auth auth = new Auth(settings);
+
+           // Process SAML response
+           if (auth.isAuthenticated()) {
+               System.out.println("User authenticated with SAML");
+           } else {
+               System.out.println("SAML authentication failed");
+           }
+       }
+   }
+   ```
+
+---
+
 #### C# SAML Integration Example
 
 **Using `Sustainsys.Saml2`**
 
-1. **Install NuGet Package**
+1. **Install NuGet Package**:
 
    ```bash
    dotnet add package Sustainsys.Saml2.AspNetCore2
    ```
 
-2. **Configure `Startup.cs`**
+2. **Configure `Startup.cs`**:
 
    ```csharp
    using Sustainsys.Saml2;
@@ -431,13 +546,13 @@ SAML allows service providers and identity providers to securely exchange user a
 
 **Using `saml2-js`**
 
-1. **Install Dependencies**
+1. **Install Dependencies**:
 
    ```bash
    npm install saml2-js express express-session
    ```
 
-2. **Configure SAML in `app.js`**
+2. **Configure SAML in `app.js`**:
 
    ```javascript
    const saml2 = require('saml2-js');
@@ -509,13 +624,13 @@ SAML allows service providers and identity providers to securely exchange user a
 
 **Using `python3-saml`**
 
-1. **Install Dependencies**
+1. **Install Dependencies**:
 
    ```bash
    pip install python3-saml Flask
    ```
 
-2. **Create `settings.json`**
+2. **Create `settings.json`**:
 
    ```json
    {
@@ -537,7 +652,7 @@ SAML allows service providers and identity providers to securely exchange user a
    }
    ```
 
-3. **Implement in Flask (`app.py`)**
+3. **Implement in Flask (`app.py`)**:
 
    ```python
    from flask import Flask, request, redirect, session
@@ -599,72 +714,125 @@ SAML allows service providers and identity providers to securely exchange user a
 
 ### Header-Based Authentication
 
-Header-based authentication involves passing user identity information in HTTP headers. This method is less secure than OIDC or SAML and is generally used in secure, internal networks or when fronted by a trusted proxy that handles authentication.
+Header-based authentication involves passing user identity information in HTTP headers. This method is generally used in secure, internal networks or when fronted by a trusted proxy that handles authentication.
 
 #### Implementation Examples
 
+
+**Java (Spring Boot Middleware)**
+
+1. **Add Middleware for Header Authentication**:
+
+   ```java
+   import org.springframework.stereotype.Component;
+   import javax.servlet.*;
+   import javax.servlet.http.HttpServletRequest;
+   import java.io.IOException;
+
+   @Component
+   public class HeaderAuthenticationFilter implements Filter {
+
+       @Override
+       public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+               throws IOException, ServletException {
+
+           HttpServletRequest httpRequest = (HttpServletRequest) request;
+           String userHeader = httpRequest.getHeader("X-User");
+           if (userHeader != null) {
+               // Example: Set the user in the security context
+               System.out.println("User authenticated: " + userHeader);
+           }
+           chain.doFilter(request, response);
+       }
+   }
+   ```
+
 **C# (ASP.NET Core Middleware)**
 
-```csharp
-public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-{
-    app.Use(async (context, next) =>
-    {
-        if (context.Request.Headers.ContainsKey("X-User"))
-        {
-            var username = context.Request.Headers["X-User"];
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, username) };
-            var identity = new ClaimsIdentity(claims, "HeaderAuthentication");
-            context.User = new ClaimsPrincipal(identity);
-        }
-        await next.Invoke();
-    });
+1. **Configure `Startup.cs`**:
 
-    app.UseRouting();
-    app.UseAuthorization();
-    app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-}
-```
+   ```csharp
+   using Microsoft.AspNetCore.Http;
+   using System.Threading.Tasks;
+
+   public class HeaderAuthMiddleware
+   {
+       private readonly RequestDelegate _next;
+
+       public HeaderAuthMiddleware(RequestDelegate next)
+       {
+           _next = next;
+       }
+
+       public async Task Invoke(HttpContext context)
+       {
+           if (context.Request.Headers.ContainsKey("X-User"))
+           {
+               var username = context.Request.Headers["X-User"];
+               // Add custom authentication logic here
+               Console.WriteLine($"Authenticated user: {username}");
+           }
+           await _next(context);
+       }
+   }
+   ```
+
+2. **Register Middleware**:
+
+   ```csharp
+   public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+   {
+       app.UseMiddleware<HeaderAuthMiddleware>();
+       app.UseRouting();
+       app.UseAuthorization();
+       app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+   }
+   ```
 
 **JavaScript (Express.js Middleware)**
 
-```javascript
-app.use((req, res, next) => {
-  if (req.headers['x-user']) {
-    req.user = { name: req.headers['x-user'] };
-  }
-  next();
-});
+1. **Create Middleware for Header-Based Authentication**:
 
-app.get('/secure', (req, res) => {
-  if (req.user) {
-    res.send(`Hello, ${req.user.name}`);
-  } else {
-    res.status(401).send('Unauthorized');
-  }
-});
-```
+   ```javascript
+   app.use((req, res, next) => {
+     if (req.headers['x-user']) {
+       req.user = { name: req.headers['x-user'] };
+       console.log("User authenticated:", req.user.name);
+     }
+     next();
+   });
+
+   app.get('/secure', (req, res) => {
+     if (req.user) {
+       res.send(`Hello, ${req.user.name}`);
+     } else {
+       res.status(401).send('Unauthorized');
+     }
+   });
+   ```
 
 **Python (Flask Middleware)**
 
-```python
-from flask import Flask, request, g
+1. **Use `before_request` for Header-Based Authentication**:
 
-app = Flask(__name__)
+   ```python
+   from flask import Flask, request, g
 
-@app.before_request
-def before_request():
-    if 'X-User' in request.headers:
-        g.user = request.headers.get('X-User')
+   app = Flask(__name__)
 
-@app.route('/secure')
-def secure():
-    user = getattr(g, 'user', None)
-    if user:
-        return f'Hello, {user}'
-    else:
-        return 'Unauthorized', 401
-```
+   @app.before_request
+   def before_request():
+       if 'X-User' in request.headers:
+           g.user = request.headers.get('X-User')
+
+   @app.route('/secure')
+   def secure():
+       user = getattr(g, 'user', None)
+       if user:
+           return f'Hello, {user}'
+       else:
+           return 'Unauthorized', 401
+   ```
 
 ---
 
@@ -702,37 +870,72 @@ Authorization determines what authenticated users are allowed to do within an ap
 
 ### Examples
 
+#### Java (Spring Boot)
+
+1. **Add Role-Based Authorization**:
+
+   ```java
+   import org.springframework.security.access.prepost.PreAuthorize;
+   import org.springframework.web.bind.annotation.GetMapping;
+   import org.springframework.web.bind.annotation.RestController;
+
+   @RestController
+   public class SecureController {
+
+       @PreAuthorize("hasRole('ROLE_ADMIN')")
+       @GetMapping("/admin")
+       public String adminAccess() {
+           return "Welcome Admin!";
+       }
+   }
+   ```
+
+2. **Enable Method Security**:
+
+   Add the following to your main application class:
+
+   ```java
+   import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+
+   @EnableGlobalMethodSecurity(prePostEnabled = true)
+   public class Application {}
+   ```
+
 #### C# (ASP.NET Core)
 
-```csharp
-// Startup.cs
-services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-});
+1. **Add Policy-Based Authorization**:
 
-// Controller
-[Authorize(Policy = "AdminOnly")]
-public IActionResult AdminOnlyAction()
-{
-    return View();
-}
-```
+   ```csharp
+   // Startup.cs
+   services.AddAuthorization(options =>
+   {
+       options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+   });
+
+   // Controller
+   [Authorize(Policy = "AdminOnly")]
+   public IActionResult AdminOnlyAction()
+   {
+       return View();
+   }
+   ```
 
 #### JavaScript (Node.js with Express)
 
-```javascript
-function ensureAdmin(req, res, next) {
-  if (req.user && req.user.roles.includes('Admin')) {
-    return next();
-  }
-  res.status(403).send('Forbidden');
-}
+1. **Implement Role-Based Access Control**:
 
-app.get('/admin', ensureAuthenticated, ensureAdmin, (req, res) => {
-  res.send('Welcome Admin');
-});
-```
+   ```javascript
+   function ensureAdmin(req, res, next) {
+     if (req.user && req.user.roles.includes('Admin')) {
+       return next();
+     }
+     res.status(403).send('Forbidden');
+   }
+
+   app.get('/admin', ensureAuthenticated, ensureAdmin, (req, res) => {
+     res.send('Welcome Admin');
+   });
+   ```
 
 ---
 
@@ -740,12 +943,23 @@ app.get('/admin', ensureAuthenticated, ensureAdmin, (req, res) => {
 
 User lifecycle management involves handling user accounts from creation to deletion, including updates and provisioning. Effective user management ensures that the right users have appropriate access at the right time.
 
+```mermaid
+graph TD
+    A[User Lifecycle Management] --> B[Provisioning]
+    A --> C[Updating]
+    A --> D[Deprovisioning]
+    B --> E[Manual]
+    B --> F[Automated (SCIM)]
+    C --> G[JIT Provisioning]
+    D --> H[LDAP Integration]
+```
+
 ### Common User Lifecycle Management Methods
 
-1. **Just-in-Time (JIT) Provisioning**
-2. **SCIM (System for Cross-domain Identity Management)**
-3. **LDAP Integration**
-4. **Manual Provisioning**
+1. **Just-in-Time (JIT) Provisioning**: Automatically provisions users upon login.
+2. **SCIM (System for Cross-domain Identity Management)**: Automates user and group management using a standard protocol.
+3. **LDAP Integration**: Connects applications to directories that support LDAP for user information and authentication.
+4. **Manual Provisioning**: Administrators manually create and manage user accounts.
 
 ---
 
@@ -756,6 +970,16 @@ User lifecycle management involves handling user accounts from creation to delet
 - JIT provisioning automatically creates user accounts in your application upon successful authentication.
 - Eliminates the need for pre-provisioning users in the application database.
 - User attributes are extracted from the authentication token and used to create the user profile.
+
+
+```mermaid
+sequenceDiagram
+    User ->> Application: Login with credentials
+    Application ->> Entra ID: Validate credentials
+    Entra ID -->> Application: Return token with user attributes
+    Application ->> Database: Create or update user profile based on token data
+    Application -->> User: Redirect to secure area
+```
 
 **Implementation Steps**
 
@@ -788,6 +1012,14 @@ User lifecycle management involves handling user accounts from creation to delet
 
 - SCIM is an open standard for automating the exchange of user identity information between identity domains or IT systems.
 - SCIM 2.0 is supported by Microsoft Entra ID for user and group provisioning.
+
+```mermaid
+graph LR
+    A[Entra ID] -- SCIM Protocol --> B[Application SCIM API]
+    B --> C[User Database]
+    B --> D[Group Database]
+    A -- Provisioning & Deprovisioning --> C
+```
 
 **Implementation Steps**
 
@@ -833,7 +1065,12 @@ User lifecycle management involves handling user accounts from creation to delet
 - LDAP (Lightweight Directory Access Protocol) is a protocol for accessing directory services.
 - Microsoft Entra ID Domain Services provides LDAP and Kerberos authentication for Azure resources.
 
-**Implementation Steps**
+```mermaid
+graph TB
+    LDAP_Client[Application LDAP Client] -- Bind/Search --> LDAP_Server[LDAP Server]
+    LDAP_Server -- Results --> LDAP_Client
+    LDAP_Server --> User_Database[User Directory Database]
+```
 
 1. **Enable Entra ID Domain Services**:
    - Set up Entra ID Domain Services in your Azure environment.
@@ -871,6 +1108,13 @@ User lifecycle management involves handling user accounts from creation to delet
 - Involves manually creating and managing user accounts within your application.
 - Suitable for small-scale applications or where automated provisioning is not practical.
 
+```mermaid
+flowchart TD
+    Admin[Administrator] -->|Creates Users| UserDatabase[User Database]
+    Admin -->|Updates Records| UserDatabase
+    Admin -->|Deletes Users| UserDatabase
+```
+
 **Implementation Steps**
 
 1. **Administrative Tools**:
@@ -902,7 +1146,16 @@ User lifecycle management involves handling user accounts from creation to delet
 
 Integrating your application with Microsoft Entra ID involves several steps to ensure secure and efficient authentication and authorization.
 
-### Steps to Onboard Your Application
+```mermaid
+sequenceDiagram
+    Admin ->> Azure Portal: Register Application
+    Azure Portal -->> Admin: Return Application ID & Secret
+    Admin ->> AppConfig: Configure App ID & Secret
+    Admin ->> Application: Implement Authentication
+    Application ->> Entra ID: Authenticate User
+    Entra ID -->> Application: Return Access Token
+    Application -->> User: Grant Access
+```
 
 1. **Plan Your Integration**
 
@@ -949,6 +1202,14 @@ Integrating your application with Microsoft Entra ID involves several steps to e
 ## Best Practices for Integrating with Microsoft Entra ID
 
 When integrating applications with Microsoft Entra ID, following best practices ensures secure, efficient, and maintainable solutions. Below are recommended practices your development teams should consider:
+
+```mermaid
+graph TB
+    SecurityPrinciples[Security Principles] -->|Ensure Compliance| Compliance[Compliance & Governance]
+    SecurityPrinciples --> ErrorHandling[Error Handling]
+    SecurityPrinciples --> UserExperience[Optimize User Experience]
+    SecurityPrinciples --> Performance[Performance & Scalability]
+```
 
 ### 1. Utilize Official Libraries and SDKs
 
@@ -1093,4 +1354,3 @@ Feel free to contribute to this guide by submitting a pull request or opening an
 
 ---
 
-Happy coding!
