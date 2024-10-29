@@ -4,6 +4,19 @@ This repository provides comprehensive guides and sample applications to help de
 
 ---
 
+```mermaid
+flowchart TD
+    A[Client Application]
+    B[Microsoft Entra ID]
+    C[Protected Resource]
+    A -->|1. Auth Request| B
+    B -->|2. Auth Response| A
+    A -->|3. Token Request| B
+    B -->|4. Access Token| A
+    A -->|5. API Request + Token| C
+    C -->|6. Response| A
+```
+---
 ## Table of Contents
 
 - [Microsoft Entra ID Integration Guide](#microsoft-entra-id-integration-guide)
