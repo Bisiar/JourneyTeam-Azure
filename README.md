@@ -1222,7 +1222,7 @@ graph TB
 - **Avoid Deprecated APIs**: Use the latest APIs and protocols (e.g., OIDC over OAuth 2.0) and avoid using deprecated ones.
 
 - **Stay Updated**: Regularly update libraries and dependencies to benefit from security patches and new features.
-- **Avoid Deprecated APIs**: Use the latest APIs and protocols (e.g., OIDC over OAuth 2.0) and avoid using deprecated ones.
+
 
 ### 2. Securely Manage Secrets and Certificates
 
