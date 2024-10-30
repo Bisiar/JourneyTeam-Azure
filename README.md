@@ -1223,7 +1223,6 @@ graph TB
 
 - **Stay Updated**: Regularly update libraries and dependencies to benefit from security patches and new features.
 
-
 ### 2. Securely Manage Secrets and Certificates
 
 - **Never Hardcode Secrets**: Do not store client secrets, certificates, or keys in source code or configuration files checked into source control.
@@ -1352,4 +1351,3 @@ The `Samples` folder contains sample applications demonstrating how to integrate
 Feel free to contribute to this guide by submitting a pull request or opening an issue.
 
 ---
-
