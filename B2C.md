@@ -15,12 +15,11 @@ Azure Active Directory B2C (Azure AD B2C) is a business-to-customer identity as 
 
 ![Infographic of Azure AD B2C identity providers and downstream applications](https://github.com/MicrosoftDocs/azure-docs/raw/main/articles/active-directory-b2c/media/overview/azureadb2c-overview.png)
 
-![[Pasted image 20241108095830.png]]
+![Infographic of Azure AD B2C architecture](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/active-directory-b2c/media/b2c-global-identity-solutions/b2c-architecture.png?raw=true)
 
-![[Pasted image 20241108100400.png]]
+![Infographic of Azure AD B2C with api](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/active-directory-b2c/media/configure-authentication-sample-web-app-with-api/web-app-with-api-architecture.png?raw=true)
 
-![[Pasted image 20241108100223.png]]
----
+![Infographic of Azure AD B2C with application insights](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/active-directory-b2c/media/analytics-with-application-insights/app-ins-graphic.png?raw=true)
 
 ## Comparison of Microsoft Entra External ID, Azure AD B2C, and Regular Azure AD Users
 
@@ -237,6 +236,5 @@ Set-AzureADUser -ObjectId $UserId -Identities @($NewIdentity)
 ---
 
 ## Additional Resources
-- [JourneyTeam Authentication Guide](README.md)
 - [Azure AD B2C Documentation](https://learn.microsoft.com/en-us/azure/active-directory-b2c/overview)
 - [Microsoft Entra External ID Overview](https://learn.microsoft.com/en-us/entra/external-id/overview)
