@@ -1318,6 +1318,7 @@ The `Samples` folder contains sample applications demonstrating how to integrate
 
 - **Microsoft Entra ID Documentation**:
   - [Microsoft Identity Platform](https://docs.microsoft.com/azure/active-directory/develop/)
+  - [Microsoft B2C](./B2C.md)
 
 - **MSAL Libraries**:
   - [MSAL Overview](https://docs.microsoft.com/azure/active-directory/develop/msal-overview)
