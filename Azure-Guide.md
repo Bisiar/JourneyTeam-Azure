@@ -1,0 +1,298 @@
+Azure Guide
+
+Naming Convention:
+![!\[\[Pasted image 20241116144829.png\]\]](https://learn.microsoft.com/en-us/training/wwl-azure/introduction-to-azure-virtual-networks/media/components-azure-resource-name-e0dedd6c.png)
+
+## Resource Naming Conventions 
+
+- **Analysis Services servers:** `as-{project}-{env}`
+- **API Management service:** `apim-{project}-{env}`
+- **API Management service APIs:** `apis-{project}-{env}`
+- **API Management service API issues:** `apii-{project}-{env}`
+- **API Management service API policies:** `apipo-{project}-{env}`
+- **API Management service products:** `apipr-{project}-{env}`
+- **API Management service products APIs:** `api-{project}-{env}`
+- **App Configuration configuration stores:** `appcs-{project}-{env}`
+- **Application Gateway:** `agw-{project}-{env}`
+- **Application Insights components:** `appi-{project}-{env}`
+- **Authorization locks:** Not specified in the sources.
+- **Authorization policy assignments:** Not specified in the sources.
+- **Authorization policy definitions (Management Group Resource Name):** `pas-{project}-{env}`
+- **Authorization policy definitions (Resource Name and Display Name):** `policy-{project}-{env}`
+- **Authorization policy set definitions (Management Group Resource Name):** `init-{project}-{env}`
+- **Authorization policy set definitions (Resource Name):** `init-{project}-{env}`
+- **Automation automation accounts:** `aa-{project}-{env}`
+- **Automation automation account certificates:** `cert-{project}-{env}`
+- **Automation automation account connections:** Not specified in the sources.
+- **Automation automation account runbooks:** `runbk-{project}-{env}`
+- **Automation automation account schedules:** Not specified in the sources.
+- **Azure Firewall:** `afw-{project}-{env}`
+- **Bastion Host:** `bas-{project}-{env}`
+- **Batch batch accounts:** `ba-{env}`
+- **Batch batch account applications:** `appl-{project}-{env}`
+- **Batch batch account certificates:** `cert-{project}-{env}`
+- **Batch batch account pools:** `pool-{project}-{env}`
+- **Blueprint blueprints:** `bp-{project}-{env}`
+- **Blueprint blueprint artifacts:** `bpa-{project}-{env}`
+- **Blueprint blueprint versions:** `bpv-{project}-{env}`
+- **BotService bot services:** `botsvc-{project}-{env}`
+- **BotService bot service channels:** `chan-{project}-{env}`
+- **BotService bot service connections:** `conn-{project}-{env}`
+- **BotService enterprise channels:** `botec-{project}-{env}`
+- **Cache Redis:** `redis-{project}-{env}`
+- **CDN profiles:** Not specified in the sources.
+- **CDN profiles endpoints:** `cdne-{project}-{env}`
+- **CDN profiles custom domains:** `cdnp-{project}-{env}`
+- **Certificate Registration certificate orders:** `cerco-{project}-{env}`
+- **Cognitive Services accounts:** `cog-{project}-{env}`
+- **Compute availability sets:** `avail-{project}-{env}`
+- **Compute disk encryption sets:** `des-{project}-{env}`
+- **Compute disks (Data Disk):** `disk-{project}-{env}`
+- **Compute disks (OS Disk):** `osdisk-{project}-{env}`
+- **Compute galleries:** `gal-{project}-{env}`
+- **Compute gallery applications:** `app-{project}-{env}`
+- **Compute gallery images:** `cimg-{project}-{env}`
+- **Compute shared image galleries:** Not specified in the sources.
+- **Compute shared image gallery images:** Not specified in the sources.
+- **Compute shared image gallery image versions:** Not specified in the sources.
+- **Compute snapshots:** `snap-{project}-{env}`
+- **Compute virtual machines (Linux):** `vm-{project}-{env}-{instance}`
+- **Compute virtual machines (Windows):** `vm-{project}-{env}-{instance}`
+- **Compute virtual machine scale sets (Linux):** `vmss-{project}-{env}-{instance}`
+- **Compute virtual machine scale sets (Windows):** `vmss-{project}-{env}-{instance}`
+- **ContainerInstance container groups:** `ci-{project}-{env}`
+- **Container Registry registries:** Not specified in the sources.
+- **Container Registry registry build tasks:** `btsk-{project}-{env}`
+- **Container Registry registry build tasks steps:** `step-{project}-{env}`
+- **Container Registry registry replications:** `rep-{project}-{env}`
+- **Container Registry registry scope maps:** `scmap-{project}-{env}`
+- **Container Registry registry tasks:** `task-{project}-{env}`
+- **Container Registry registry webhooks:** Not specified in the sources.
+- **Container Service Kubernetes clusters:** `aks-{project}-{env}`
+- **Container Service openShift managed clusters:** `osmc-{project}-{env}`
+- **Customer Insights hubs:** `cihub-{project}-{env}`
+- **Customer Insights hub connectors:** `conn-{project}-{env}`
+- **Customer Insights hub connector mappings:** `map-{project}-{env}`
+- **Customer Insights hub KPIs:** `kpi-{project}-{env}`
+- **Customer Insights hub links:** `link-{project}-{env}`
+- **Customer Insights hub predictions:** `pred-{project}-{env}`
+- **Customer Insights hub profiles:** Not specified in the sources.
+- **Customer Insights hub relationship links:** `rlink-{project}-{env}`
+- **Customer Insights hub relationships:** `rel-{project}-{env}`
+- **Customer Insights hub views:** `view-{project}-{env}`
+- **Custom Providers associations:** Not specified in the sources.
+- **Custom Providers resource providers:** `cprep-{project}-{env}`
+- **Data Box jobs:** `dbjob-{project}-{env}`
+- **Data Bricks workspaces:** `dbw-{project}-{env}`
+- **Data Factory factories:** Not specified in the sources.
+- **Data Factory factory data flows:** `flow-{project}-{env}`
+- **Data Factory factory datasets:** `dset-{project}-{env}`
+- **Data Factory factory integration runtimes:** `run-{project}-{env}`
+- **Data Factory factory linked services:** `lksvc-{project}-{env}`
+- **Data Factory factory pipelines:** `pipe-{project}-{env}`
+- **Data Factory factory triggers:** Not specified in the sources.
+- **Data Lake Analytics accounts:** Not specified in the sources.
+- **Data Lake Analytics account compute policies:** Not specified in the sources.
+- **Data Lake Analytics account data sources:** Not specified in the sources.
+- **Data Lake Analytics account firewall rules:** `rule-{project}-{env}`
+- **Data Lake Analytics account storage accounts:** `dlasa-{project}-{env}`
+- **Data Lake Store accounts:** `dls-{project}-{env}`
+- **Data Lake Store account firewall rules:** Not specified in the sources.
+- **Data Migration services:** Not specified in the sources.
+- **Data Migration service projects:** `proj-{project}-{env}`
+- **DB for MariaDB servers:** `mdbsv-{project}-{env}`
+- **DB for MariaDB server databases:** `mdbdb-{project}-{env}`
+- **DB for MariaDB server firewall rules:** Not specified in the sources.
+- **DB for MySQL servers:** `mysql-{project}-{env}`
+- **DB for MySQL server databases:** Not specified in the sources.
+- **DB for MySQL server firewall rules:** Not specified in the sources.
+- **DB for PostgreSQL flexible servers:** Not specified in the sources.
+- **DB for PostgreSQL flexible server configurations:** Not specified in the sources.
+- **DB for PostgreSQL flexible server databases:** Not specified in the sources.
+- **DB for PostgreSQL flexible server firewall rules:** Not specified in the sources.
+- **DB for PostgreSQL servers:** Not specified in the sources.
+- **DB for PostgreSQL server databases:** `db-{project}-{env}`
+- **DB for PostgreSQL server firewall rules:** `rule-{project}-{env}`
+- **Devices IoT hubs:** `iot-{project}-{env}`
+- **Devices IoT hub certificates:** `cert-{project}-{env}`
+- **Devices IoT hub event hub endpoints consumer groups:** `congp-{project}-{env}`
+- **Devices provisioning services:** `provs-{project}-{env}`
+- **DevTest Lab labs:** `dtlab-{project}-{env}`
+- **DevTest Lab lab custom images:** `img-{project}-{env}`
+- **DevTest Lab lab formulas:** `form-{project}-{env}`
+- **DevTest Lab lab virtual machines (Linux):** `vm-{project}-{env}-{instance}`
+- **DevTest Lab lab virtual machines (Windows):** `vm-{project}-{env}-{instance}`
+- **Event Grid domains:** `evgd-{project}-{env}`
+- **Event Grid domain topics:** `evgt-{project}-{env}`
+- **Event Grid event subscriptions:** `evgs-{project}-{env}`
+- **Event Grid system topics:** Not specified in the sources.
+- **Event Grid topics:** `egtp-{project}-{env}`
+- **Event Hub clusters:** `evhcl-{project}-{env}`
+- **Event Hub namespaces:** `evhns-{project}-{env}`
+- **Event Hub namespace authorization rules:** `rule-{project}-{env}`
+- **Event Hub namespace disaster recovery configs:** `drcfg-{project}-{env}`
+- **Event Hub namespace event hubs:** `evh-{project}-{env}`
+- **HDInsight clusters (Hadoop Cluster):** `hadoop-{project}-{env}`
+- **HDInsight clusters (HBase Cluster):** `hbase-{project}-{env}`
+- **HDInsight clusters (Kafka Cluster):** `kafka-{project}-{env}`
+- **HDInsight clusters (ML Services Cluster):** `storm-{project}-{env}`
+- **HDInsight clusters (Spark Cluster):** `spark-{project}-{env}`
+- **HDInsight clusters (Storm Cluster):** `spark-{project}-{env}`
+- **Import/Export jobs:** `iejob-{project}-{env}`
+- **Insights action groups:** `ag-{project}-{env}`
+- **Insights activity log alerts:** `inala-{project}-{env}`
+- **Insights metric alerts:** Not specified in the sources.
+- **IoT Central IoT apps:** `iotapp-{project}-{env}`
+- **Key Vault vaults:** Not specified in the sources.
+- **Key Vault managed HSMs:** Not specified in the sources.
+- **Kusto clusters:** `dec-{project}-{env}`
+- **Kusto cluster attached database configurations:** Not specified in the sources.
+- **Kusto cluster databases:** Not specified in the sources.
+- **Kusto cluster database data connections:** Not specified in the sources.
+- **Kusto cluster database event hub connections:** `ehcon-{project}-{env}`
+- **Kusto cluster database principal assignments:** Not specified in the sources.
+- **Kusto cluster principal assignments:** Not specified in the sources.
+- **Load Balancer (external):** `lbe-{project}-{env}`
+- **Load Balancer (internal):** `lbi-{project}-{env}`
+- **Local Network Gateway:** `lgw-{project}-{env}`
+- **Logic integration accounts:** `ia-{project}-{env}`
+- **Logic integration account agreements:** Not specified in the sources.
+- **Logic integration account assemblies:** `assem-{project}-{env}`
+- **Logic integration account batches:** Not specified in the sources.
+- **Logic integration account certificates:** Not specified in the sources.
+- **Logic integration account maps:** Not specified in the sources.
+- **Logic integration account partners:** Not specified in the sources.
+- **Logic integration account schemas:** Not specified in the sources.
+- **Logic integration account sessions:** `ses-{project}-{env}`
+- **Logic integration service environments:** `lise-{project}-{env}`
+- **Logic integration service environment managed APIs:** `mapi-{project}-{env}`
+- **Logic workflows:** `logic-{project}-{env}`
+- **Machine Learning commitment plans:** `mlcp-{project}-{env}`
+- **Machine Learning web services:** `mlweb-{project}-{env}`
+- **Machine Learning workspaces:** `mlws-{project}-{env}`
+- **Machine Learning Services workspaces:** `mlw-{project}-{env}`
+- **Machine Learning Services workspace computes:** `mlswc-{project}-{env}`
+- **Management Groups:** `mg-{project}-{env}`
+- **Maps accounts:** `macc-{project}-{env}`
+- **Media media services:** `mms-{env}`
+- **Media media service live events:** `lievt-{project}-{env}`
+- **Media media service live event live outputs:** `liout-{project}-{env}`
+- **Media media service streaming endpoints:** `strep-{project}-{env}`
+- **Migrate assessment projects:** Not specified in the sources.
+- **Network connections:** `con-{project}-{env}`
+- **Network DDoS protection plans:** Not specified in the sources.
+- **Network ExpressRoute circuits:** `erc-{project}-{env}`
+- **Network ExpressRoute circuit authorizations:** Not specified in the sources.
+- **Network ExpressRoute circuit peerings:** Not specified in the sources.
+- **Network IP groups:** Not specified in the sources.
+- **Network load balancers (external):** `lbe-{project}-{env}`
+- **Network load balancers (internal):** `lbi-{project}-{env}`
+- **Network local network gateways:** `lgw-{project}-{env}`
+- **Network network interfaces:** Not specified in the sources.
+- **Network network profiles:** Not specified in the sources.
+- **Network network security groups:** `nsg-{project}-{env}`
+- **Network network watchers:** Not specified in the sources.
+- **Network private DNS zones:** Not specified in the sources.
+- **Network private DNS zone A records:** Not specified in the sources.
+- **Network private DNS zone AAAA records:** Not specified in the sources.
+- **Network private DNS zone CNAME records:** Not specified in the sources.
+- **Network private DNS zone MX records:** Not specified in the sources.
+- **Network private DNS zone PTR records:** Not specified in the sources.
+- **Network private DNS zone SRV records:** Not specified in the sources.
+- **Network private DNS zone TXT records:** Not specified in the sources.
+- **Network private endpoints:** `pe-{project}-{env}`
+- **Network private link services:** Not specified in the sources.
+- **Network private link service private endpoint connections:** Not specified in the sources.
+- **Network public IP addresses:** `pip-{project}-{env}`
+- **Network public IP prefixes:** Not specified in the sources.
+- **Network route filters:** Not specified in the sources.
+- **Network route tables:** Not specified in the sources.
+- **Network route table routes:** `udr-{project}-{env}`
+- **Network service endpoint policies:** `se-{project}-{env}`
+- **Network traffic manager profiles:** Not specified in the sources.
+- **Network virtual network gateways:** `vgw-{project}-{env}`
+- **Network virtual networks:** `vnet-{project}-{env}`
+- **Network virtual network peerings:** `peer-{project}-{env}`
+- **Network virtual network subnets:** `subnet-{project}-{env}`
+- **Network virtual WANs:** `vwan-{project}-{env}`
+- **Network VPN gateways:** `vpng-{project}-{env}`
+- **Network VPN server configurations:** Not specified in the sources.
+- **Network VPN sites:** `vpn-{project}-{env}`
+- **Notification Hubs namespaces:** `ntfns-{project}-{env}`
+- **Notification Hubs namespace authorization rules:** `rule-{project}-{env}`
+- **Notification Hubs namespace notification hubs:** `ntf-{project}-{env}`
+- **Operational Insights clusters:** `opic-{project}-{env}`
+- **Operational Insights workspaces:** `log-{project}-{env}`
+- **Operations Management solutions:** `opms-{project}-{env}`
+- **Portal dashboards:** `pdash-{project}-{env}`
+- **Power BI Embedded capacities:** Not specified in the sources.
+- **Power BI workspace collections:** `pbiwc-{project}-{env}`
+- **Power BI Dedicated capacities:** `pbi-{project}-{env}`
+- **Purview accounts:** Not specified in the sources.
+- **Recovery Services vaults:** `rsv-{project}-{env}`
+- **Recovery Services vault backup policies:** `rsvbp-{project}-{env}`
+- **Relay namespaces:** `rns-{project}-{env}`
+- **Relay namespace authorization rules:** `rule-{project}-{env}`
+- **Relay namespace hybrid connections:** `hycon-{project}-{env}`
+- **Relay namespace hybrid connection authorization rules:** `rule-{project}-{env}`
+- **Relay namespace WCF relays:** `wcfr-{project}-{env}`
+- **Relay namespace WCF relay authorization rules:** `wcfra-{project}-{env}`
+- **Resource Groups:** `rg-{project}-{env}`
+- **Resources deployments:** `dploy-{project}-{env}`
+- **Resources resource groups:** `rg-{project}-{env}`
+- **Resources tags:** Not specified in the sources.
+- **Resources tag names:** Not specified in the sources.
+- **Resources tag name tag values:** `rtnv-{project}-{env}`
+- **Resources template specs:** `tspec-{project}-{env}`
+- **Search search services:** Not specified in the sources.
+- **Service Bus namespaces:** `sb-{project}-{env}`
+- **Service Bus namespace authorization rules:** `rule-{project}-{env}`
+- **Service Bus namespace disaster recovery configs:** `sbndc-{project}-{env}`
+- **Service Bus namespace migration configurations:** `migc-{project}-{env}`
+- **Service Bus namespace queues:** `sbq-{project}-{env}`
+- **Service Bus namespace queue authorization rules:** `rule-{project}-{env}`
+- **Service Bus namespace topics:** `sbt-{project}-{env}`
+- **Service Bus namespace topic authorization rules:** `rule-{project}-{env}`
+- **Service Bus namespace topic subscriptions:** `tsub-{project}-{env}`
+- **Service Bus namespace topic subscription rules:** Not specified in the sources.
+- **SignalR Service SignalR:** Not specified in the sources.
+- **SQL servers:** Not specified in the sources.
+- **SQL server databases:** Not specified in the sources.
+- **SQL server elastic pools:** `sqlep-{project}-{env}`
+- **SQL server failover groups:** Not specified in the sources.
+- **SQL server firewall rules:** Not specified in the sources.
+- **SQL server jobs:** Not specified in the sources.
+- **SQL server job agents:** Not specified in the sources.
+- **SQL server job agent credentials:** Not specified in the sources.
+- **SQL server managed instances:** Not specified in the sources.
+- **SQL server security alert policies:** Not specified in the sources.
+- **SQL server sync agents:** Not specified in the sources.
+- **SQL server sync groups:** `sqlsg-{project}-{env}`
+- **SQL server virtual network rules:** Not specified in the sources.
+- **Storage blob containers:** Not specified in the sources.
+- **Storage blob services:** Not specified in the sources.
+- **Storage file services:** `stfs-{project}-{env}`
+- **Storage file share:** `stfss-{project}-{env}`
+- **Storage queues:** `squ-{project}-{env}`
+- **Storage storage accounts:** `st-{env}`
+- **StorageSync storage sync services:** Not specified in the sources.
+- **StorageSync storage sync service sync groups:** `sgrp-{project}-{env}`
+- **StorSimple managers:** `ssimp-{project}-{env}`
+- **Stream Analytics clusters:** Not specified in the sources.
+- **Stream Analytics streaming jobs:** `sasj-{project}-{env}`
+- **Stream Analytics streaming job functions:** Not specified in the sources.
+- **Stream Analytics streaming job inputs:** Not specified in the sources.
+- **Stream Analytics streaming job outputs:** `sjout-{project}-{env}`
+- **Stream Analytics streaming job transformations:** `sjtrf-{project}-{env}`
+- **Subscription subscriptions:** Not specified in the sources.
+- **Synapse workspaces:** Not specified in the sources.
+- **Synapse workspace SQL pools:** Not specified in the sources.
+- **Time Series Insights environments:** `tsi-{project}-{env}`
+- **Virtual Machines:** `vm-{project}-{env}-{instance}`
+- **Virtual Networks:** `vnet-{project}-{env}`
+- **Web app service plans:** `asp-{project}-{env}`
+- **Web sites (App Service Environment):** Not specified in the sources.
+- **Web sites (Function App):** `func-{project}-{env}`
+- **Web sites (Static Web App):** `stapp-{project}-{env}`
+- **Web sites (Web App):** `app-{project}-{env}`
+
