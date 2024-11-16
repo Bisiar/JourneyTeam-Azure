@@ -237,4 +237,6 @@ Set-AzureADUser -ObjectId $UserId -Identities @($NewIdentity)
 
 ## Additional Resources
 - [Azure AD B2C Documentation](https://learn.microsoft.com/en-us/azure/active-directory-b2c/overview)
+- [B2C Samples](https://github.com/azure-ad-b2c/samples)
+- [Page Templates](https://github.com/azure-samples/azure-ad-b2c-page-templates/tree/master/)
 - [Microsoft Entra External ID Overview](https://learn.microsoft.com/en-us/entra/external-id/overview)
