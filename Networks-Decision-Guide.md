@@ -4,7 +4,7 @@
 
   <div style="width: 70%; padding-right: 10px; overflow-y: auto; overflow-x: hidden;">
 
-  ## Architecture Decision Flowchart
+## Architecture Decision Flowchart
 
   ```mermaid
   %%{ init: {'theme': 'default', 'themeVariables': { 'fontSize': '16px', 'nodeSpacing': 50, 'edgeLength': 50, 'rankSpacing': 50 } } }%%
@@ -92,82 +92,82 @@
 
   <div style="width: 30%; padding-left: 10px; overflow-y: auto; overflow-x: hidden;">
 
-  ## Detailed Explanations
+## Detailed Explanations
 
-  ### Q1: Do you need to create an isolated network in Azure?
+### Q1: Do you need to create an isolated network in Azure?
 
   **Explanation:**
 
   An isolated network in Azure, known as a **Virtual Network (VNet)**, allows you to securely communicate between Azure resources, the internet, and on-premises networks. If your workloads require network isolation, control over IP address ranges, or custom DNS settings, you should create a VNet.
 
-  - **Considerations:**
-    - Security and compliance requirements.
-    - Need for traffic control between resources.
-    - Integration with on-premises networks.
+- **Considerations:**
+  - Security and compliance requirements.
+  - Need for traffic control between resources.
+  - Integration with on-premises networks.
 
   **Learn More:**
 
-  - [Azure Virtual Network Documentation](https://docs.microsoft.com/azure/virtual-network/virtual-networks-overview)
+- [Azure Virtual Network Documentation](https://docs.microsoft.com/azure/virtual-network/virtual-networks-overview)
 
   ---
 
-  ### Q2: Will you use Azure services that require dedicated subnets?
+### Q2: Will you use Azure services that require dedicated subnets?
 
   **Explanation:**
 
   Certain Azure services require dedicated subnets due to their networking requirements. Examples include:
 
-  - **Azure Kubernetes Service (AKS)**
-  - **Azure Spring Apps**
-  - **Azure Lab Services**
-  - **Azure API Management** (in Internal mode)
-  - **App Service Environment (ASE)**
-  - **Azure Logic Apps** (Integration Service Environment)
-  - **Azure Container Apps**
-  - **Azure Dedicated HSM**
-  - **Azure NetApp Files**
+- **Azure Kubernetes Service (AKS)**
+- **Azure Spring Apps**
+- **Azure Lab Services**
+- **Azure API Management** (in Internal mode)
+- **App Service Environment (ASE)**
+- **Azure Logic Apps** (Integration Service Environment)
+- **Azure Container Apps**
+- **Azure Dedicated HSM**
+- **Azure NetApp Files**
 
   **Action:**
 
-  - **Identify** which services you plan to use that require dedicated subnets.
-  - **Plan** your address space to accommodate these subnets without overlapping with other subnets or networks.
+- **Identify** which services you plan to use that require dedicated subnets.
+- **Plan** your address space to accommodate these subnets without overlapping with other subnets or networks.
 
   **Learn More:**
 
-  - [Azure Kubernetes Service Networking](https://docs.microsoft.com/azure/aks/configure-azure-cni)
-  - [Azure API Management VNet Integration](https://docs.microsoft.com/azure/api-management/api-management-using-with-vnet)
+- [Azure Kubernetes Service Networking](https://docs.microsoft.com/azure/aks/configure-azure-cni)
+- [Azure API Management VNet Integration](https://docs.microsoft.com/azure/api-management/api-management-using-with-vnet)
 
   ---
 
-  ### Q3: Identify services requiring dedicated subnets and plan address space
+### Q3: Identify services requiring dedicated subnets and plan address space
 
   **Explanation:**
 
   After identifying the services that need dedicated subnets:
 
-  - **Allocate sufficient IP addresses** in each subnet for the service and future growth.
-  - **Ensure non-overlapping subnets** within your VNet and with on-premises networks.
-  - **Consider subnet requirements** for services regarding size and address ranges.
+- **Allocate sufficient IP addresses** in each subnet for the service and future growth.
+- **Ensure non-overlapping subnets** within your VNet and with on-premises networks.
+- **Consider subnet requirements** for services regarding size and address ranges.
 
   **Learn More:**
 
-  - [Virtual Network Subnets and IP Addressing](https://docs.microsoft.com/azure/virtual-network/virtual-network-manage-subnet)
+- [Virtual Network Subnets and IP Addressing](https://docs.microsoft.com/azure/virtual-network/virtual-network-manage-subnet)
 
   ---
 
-  ### Q4: Plan VNet Address Space and Subnets
+### Q4: Plan VNet Address Space and Subnets
 
   **Explanation:**
 
   Planning your VNet address space is crucial:
 
-  - **Use private IP address ranges** as per RFC 1918.
-  - **Ensure address spaces do not overlap** with on-premises networks or other VNets.
-  - **Segment your VNet into subnets** based on workload and security requirements.
+- **Use private IP address ranges** as per RFC 1918.
+- **Ensure address spaces do not overlap** with on-premises networks or other VNets.
+- **Segment your VNet into subnets** based on workload and security requirements.
 
   **Learn More:**
 
-  - [Planning and Design for Azure Virtual Networks](https://docs.microsoft.com/azure/virtual-network/plan-design-address-space)
+- [Planning and Design for Azure Virtual Networks](https://docs.microsoft.com/azure/virtual-network/plan-design-address-space)
 
   ---
 
@@ -353,4 +353,40 @@ Decide on the Azure regions and subscriptions where you will deploy your VNets:
 
 This complete Markdown guide provides a side-by-side view of the architecture decision flowchart and detailed explanations with individual scrollbars. This setup allows readers to navigate through the decision-making process efficiently, aligning the diagram with the explanations as needed.
 
-**Feel free to adjust the content, styles, or layout to better suit your preferences or the requirements of your environment. Let me know if you need any further assistance!**
+**LMastering Azure Networking with Interactive Lab Simulations! 🚀**
+📌[Lab] Design and implement a Virtual Network in Azure
+<https://lnkd.in/gP_DJt9g>
+📌[Lab] Configure DNS settings in Azure
+<https://lnkd.in/gXc9WHNs>
+📌[Lab] Connect two Azure Virtual Networks using global virtual network peering
+<https://lnkd.in/gNED8Ys6>
+📌[Lab] Create and configure a virtual network gateway
+<https://lnkd.in/gHeDVTb8>
+📌[Lab] Create a Virtual WAN
+<https://lnkd.in/gfVccCgq>
+📌[Lab] Configure an ExpressRoute Gateway
+<https://lnkd.in/gE_q3a53>
+📌[Lab] Provision an ExpressRoute circuit
+<https://lnkd.in/gRqQe4gM>
+📌[Lab] Create and configure an Azure load balancer
+<https://lnkd.in/g9yKM6jA>
+📌[Lab] Create a Traffic Manager profile
+<https://lnkd.in/gpgvT6s3>
+📌[Lab] Deploy Azure Application Gateway
+<https://lnkd.in/gShY-UdT>
+📌[Lab] Create a Front Door for a highly available web application
+<https://lnkd.in/gtqmxChV>
+📌[Lab] Configure DDoS Protection on a virtual network
+<https://lnkd.in/grQb4c9b>
+📌[Lab] Deploy and configure Azure Firewall
+<https://lnkd.in/g44ZqJtb>
+📌[Lab] Secure your virtual hub using Azure Firewall Manager
+<https://lnkd.in/gbQvqrQp>
+📌[Lab] Restrict network access to PaaS resources with virtual network service endpoints
+<https://lnkd.in/gwvNJyc3>
+📌[Lab] Create an Azure private endpoint using Azure PowerShell
+<https://lnkd.in/gsReps3K>
+📌[Lab] Monitor a load balancer resource using Azure Monitor
+<https://lnkd.in/gj3FCr7s>
+🔽 Reference Diagram:
+<https://lnkd.in/g2BmGUkm>
