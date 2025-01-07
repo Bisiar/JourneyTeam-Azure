@@ -15,6 +15,7 @@ This guide provides a comprehensive overview of OAuth tokens, their types, usage
 - [Best Practices](#best-practices)
 - [Common OAuth Flows](#common-oauth-flows)
 - [Troubleshooting](#troubleshooting)
+- [Development and Troubleshooting Tools](#development-and-troubleshooting-tools)
 
 ## Introduction to OAuth Tokens
 
@@ -506,8 +507,7 @@ public class TokenValidator
                 out SecurityToken validatedToken);
 
             return (true, principal);
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             // Log the error details
             return (false, null);
@@ -736,6 +736,195 @@ public class TokenValidator {
    - 400: Bad Request (malformed token)
 
 ---
+
+## Development and Troubleshooting Tools
+
+> 💡 **Best Practice**: Use specialized tools for debugging and testing OAuth flows to save time and reduce security risks.
+
+### Token Inspection and Debugging
+
+#### 1. JWT.io
+- **Purpose**: Interactive JWT debugger and validator
+- **Features**:
+  - Decode JWT tokens
+  - Verify signatures
+  - Generate new tokens for testing
+  - Supports multiple algorithms
+- **Best Practices**:
+  - Never paste production tokens
+  - Use for development and testing only
+  - Verify algorithm matches your implementation
+
+#### 2. SAML-Tracer
+- **Purpose**: Browser extension for SAML and OAuth debugging
+- **Features**:
+  - Capture SAML and OAuth traffic
+  - Decode URL-encoded parameters
+  - Export traces for analysis
+  - Filter by protocol type
+- **Installation**:
+  - [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/saml-tracer/)
+  - [Chrome Extension](https://chrome.google.com/webstore/detail/saml-tracer/mpdajninpobndbfcldcmbpnnbhibjmch)
+
+#### 3. Fiddler Everywhere
+- **Purpose**: Web debugging proxy
+- **Features**:
+  - Inspect OAuth redirects
+  - Modify requests in real-time
+  - Debug mobile apps
+  - SSL/TLS inspection
+- **Best Practices**:
+  - Use separate profiles for different environments
+  - Never intercept production traffic
+  - Properly secure your Fiddler certificates
+
+### API Testing Tools
+
+#### 1. Postman
+- **Purpose**: API development and testing
+- **OAuth Features**:
+  - Built-in OAuth 2.0 flow support
+  - Token management
+  - Environment variables for credentials
+  - Automatic token refresh
+- **Example Collection**:
+```json
+{
+    "auth": {
+        "type": "oauth2",
+        "oauth2": {
+            "accessTokenUrl": "https://auth-server/token",
+            "authUrl": "https://auth-server/authorize",
+            "clientId": "{{clientId}}",
+            "clientSecret": "{{clientSecret}}",
+            "scope": "read write",
+            "tokenName": "access_token",
+            "grant_type": "authorization_code"
+        }
+    }
+}
+```
+
+#### 2. Thunder Client (VS Code Extension)
+- **Purpose**: Lightweight API testing
+- **Features**:
+  - OAuth 2.0 support
+  - Environment management
+  - Request history
+  - Collection sharing
+
+### Browser Developer Tools
+
+#### 1. Chrome DevTools
+- **Purpose**: Network and storage inspection
+- **Useful Features**:
+  - Network tab for OAuth redirects
+  - Application tab for token storage
+  - Console for debugging
+- **Tips**:
+```javascript
+// Console commands for token inspection
+// List all cookies
+document.cookie.split(';').forEach(cookie => console.log(cookie.trim()));
+
+// Check localStorage tokens (if used)
+Object.keys(localStorage).forEach(key => {
+    if (key.includes('token')) {
+        console.log(`${key}: ${localStorage.getItem(key)}`);
+    }
+});
+```
+
+#### 2. Firefox Developer Tools
+- **Purpose**: Security testing and debugging
+- **Features**:
+  - Storage Inspector
+  - Network Monitor
+  - Security Panel
+
+### Mock OAuth Servers
+
+#### 1. MockOAuth
+- **Purpose**: Local OAuth server for testing
+- **Features**:
+  - Configurable responses
+  - Multiple grant types
+  - Custom claims
+- **Example Setup**:
+```javascript
+const MockOAuth = require('mock-oauth2-server');
+
+const server = new MockOAuth({
+    port: 8080,
+    tokenEndpoint: '/oauth/token',
+    authorizeEndpoint: '/oauth/authorize',
+    tokens: {
+        access_token: 'test-token',
+        expires_in: 3600,
+        token_type: 'Bearer'
+    }
+});
+```
+
+#### 2. Wiremock
+- **Purpose**: Mock server with OAuth support
+- **Features**:
+  - Stub OAuth endpoints
+  - Record and replay
+  - Fault simulation
+- **Example Configuration**:
+```json
+{
+    "request": {
+        "method": "POST",
+        "url": "/oauth/token"
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "jsonBody": {
+            "access_token": "test-token",
+            "token_type": "bearer",
+            "expires_in": 3600
+        }
+    }
+}
+```
+
+### Security Testing Tools
+
+#### 1. OWASP ZAP
+- **Purpose**: Security testing proxy
+- **Features**:
+  - OAuth scanner
+  - Authentication tester
+  - Automated security tests
+- **Best Practices**:
+  - Use authentication scripts
+  - Configure session management
+  - Test token replay attacks
+
+#### 2. Burp Suite
+- **Purpose**: Web security testing
+- **Features**:
+  - OAuth scanner
+  - Session handling
+  - Token analysis
+- **Example Session Rules**:
+```yaml
+- name: "OAuth Token Refresh"
+  enabled: true
+  actions:
+    - type: "check_session_validity"
+      condition: "status_code == 401"
+    - type: "refresh_access_token"
+      endpoint: "/oauth/token"
+      grant_type: "refresh_token"
+```
+
+> ⚠️ **Security Note**: Always use these tools in development or testing environments only. Never use them to inspect or modify production traffic.
 
 ## Additional Resources
 
