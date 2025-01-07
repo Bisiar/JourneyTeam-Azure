@@ -16,6 +16,7 @@ This guide provides a comprehensive overview of OAuth tokens, their types, usage
 - [Common OAuth Flows](#common-oauth-flows)
 - [Troubleshooting](#troubleshooting)
 - [Development and Troubleshooting Tools](#development-and-troubleshooting-tools)
+- [Azure Workload Identity Authentication](#azure-workload-identity-authentication)
 
 ## Introduction to OAuth Tokens
 
@@ -926,8 +927,248 @@ const server = new MockOAuth({
 
 > ⚠️ **Security Note**: Always use these tools in development or testing environments only. Never use them to inspect or modify production traffic.
 
-## Additional Resources
+## Azure Workload Identity Authentication
 
-- [OAuth 2.0 Specification](https://oauth.net/2/)
-- [JWT Specification](https://jwt.io/)
-- [OpenID Connect Specification](https://openid.net/connect/)
+> 💡 **Best Practice**: Use Workload Identity Federation instead of service principals with secrets whenever possible to improve security and reduce secret management overhead.
+
+### Overview
+
+Workload Identity Federation allows applications and services to use federation with external identity providers (including other clouds, Kubernetes, and on-premises services) to access Azure resources without managing secrets. It supports OpenID Connect and SAML 2.0 protocols for federation.
+
+```mermaid
+sequenceDiagram
+    participant App as Application/Service
+    participant OIDC as OIDC Provider
+    participant Azure as Azure AD
+    participant Resource as Azure Resource
+    
+    App->>OIDC: 1. Request token
+    OIDC->>App: 2. OIDC token
+    App->>Azure: 3. Exchange OIDC token
+    Azure->>Azure: 4. Validate federation
+    Azure->>App: 5. Azure AD token
+    App->>Resource: 6. Access resource
+```
+
+### Implementation Examples
+
+#### 1. Kubernetes to Azure Federation
+
+```yaml
+# Azure CLI commands to set up federation
+az ad app create --display-name "my-k8s-app"
+az ad sp create --id <app-id>
+az ad app federated-credential create \
+    --id <app-id> \
+    --issuer "https://token.actions.githubusercontent.com" \
+    --subject "system:serviceaccount:default:my-k8s-sa" \
+    --name "kubernetes-federated-credential"
+```
+
+```yaml
+# Kubernetes service account configuration
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: my-k8s-sa
+  annotations:
+    azure.workload.identity/client-id: <application-client-id>
+    azure.workload.identity/tenant-id: <tenant-id>
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: quick-start
+  namespace: default
+spec:
+  serviceAccountName: my-k8s-sa
+  containers:
+    - image: ghcr.io/azure/azure-workload-identity/msal-go
+      name: oidc
+      env:
+      - name: AZURE_CLIENT_ID
+        value: <application-client-id>
+      - name: AZURE_TENANT_ID
+        value: <tenant-id>
+      - name: AZURE_FEDERATED_TOKEN_FILE
+        value: /var/run/secrets/azure/tokens/azure-identity-token
+```
+
+#### 2. GitHub Actions to Azure Federation
+
+```yaml
+# GitHub Actions workflow with OIDC authentication
+name: Run Azure Login with OIDC
+on: [push]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Az CLI login with OIDC'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: 'Run Azure CLI commands'
+        run: |
+          az account show
+          az group list
+```
+
+#### 3. Application Code Examples
+
+```csharp
+// C# - Azure.Identity with Workload Identity
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+
+public class SecretManager
+{
+    private readonly SecretClient _secretClient;
+
+    public SecretManager(string keyVaultUrl)
+    {
+        // DefaultAzureCredential will automatically use Workload Identity when available
+        var credential = new DefaultAzureCredential(
+            new DefaultAzureCredentialOptions
+            {
+                ManagedIdentityClientId = "<client-id>" // Optional
+            });
+
+        _secretClient = new SecretClient(
+            new Uri(keyVaultUrl),
+            credential);
+    }
+
+    public async Task<string> GetSecretAsync(string secretName)
+    {
+        var secret = await _secretClient.GetSecretAsync(secretName);
+        return secret.Value.Value;
+    }
+}
+```
+
+```java
+// Java - Azure Identity with Workload Identity
+import com.azure.identity.DefaultAzureCredential;
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.security.keyvault.secrets.SecretClient;
+import com.azure.security.keyvault.secrets.SecretClientBuilder;
+
+public class SecretManager {
+    private final SecretClient secretClient;
+
+    public SecretManager(String keyVaultUrl) {
+        DefaultAzureCredential credential = new DefaultAzureCredentialBuilder()
+            .managedIdentityClientId("<client-id>") // Optional
+            .build();
+
+        secretClient = new SecretClientBuilder()
+            .vaultUrl(keyVaultUrl)
+            .credential(credential)
+            .buildClient();
+    }
+
+    public String getSecret(String secretName) {
+        return secretClient.getSecret(secretName).getValue();
+    }
+}
+```
+
+```javascript
+// JavaScript/TypeScript - Azure Identity with Workload Identity
+import { DefaultAzureCredential } from "@azure/identity";
+import { SecretClient } from "@azure/keyvault-secrets";
+
+class SecretManager {
+    private secretClient: SecretClient;
+
+    constructor(keyVaultUrl: string) {
+        const credential = new DefaultAzureCredential({
+            managedIdentityClientId: "<client-id>" // Optional
+        });
+
+        this.secretClient = new SecretClient(
+            keyVaultUrl,
+            credential
+        );
+    }
+
+    async getSecret(secretName: string): Promise<string | undefined> {
+        const secret = await this.secretClient.getSecret(secretName);
+        return secret.value;
+    }
+}
+```
+
+### Best Practices for Workload Identity
+
+> 💡 **Best Practice**: Follow these guidelines for secure workload identity implementation:
+> - Use separate identities for different workloads
+> - Implement least-privilege access
+> - Regular credential rotation
+> - Monitor identity usage
+
+#### Security Configuration
+
+```powershell
+# PowerShell - Configure Conditional Access for Workload Identities
+New-AzureADMSConditionalAccessPolicy `
+    -Name "Workload Identity Policy" `
+    -State "enabled" `
+    -Conditions @{
+        Applications = @{
+            IncludeApplications = @("<app-id>")
+        }
+        Users = @{
+            IncludeUsers = @("All")
+        }
+        Locations = @{
+            IncludeLocations = @("All")
+        }
+    } `
+    -GrantControls @{
+        BuiltInControls = @("RequireCompliantDevice")
+    }
+```
+
+#### Monitoring Setup
+
+```bash
+# Azure CLI - Set up monitoring for workload identities
+az monitor diagnostic-settings create \
+    --name "workload-identity-logs" \
+    --resource "<resource-id>" \
+    --logs '[{"category": "SignInLogs","enabled": true}]' \
+    --workspace "<log-analytics-workspace-id>"
+```
+
+### Troubleshooting Workload Identity
+
+> 💡 **Best Practice**: Common troubleshooting steps:
+> 1. Verify federation setup
+> 2. Check token claims
+> 3. Validate RBAC assignments
+> 4. Review audit logs
+
+```bash
+# Azure CLI - Check federation setup
+az ad app federated-credential list --id "<app-id>"
+
+# Check RBAC assignments
+az role assignment list --assignee "<app-id>"
+
+# View sign-in logs
+az monitor log-analytics query \
+    --workspace "<workspace-id>" \
+    --query "SignInLogs | where AppId == '<app-id>'"
+```
+
+{{ ... }}
