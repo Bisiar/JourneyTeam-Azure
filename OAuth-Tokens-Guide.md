@@ -35,7 +35,7 @@ OAuth tokens are the cornerstone of modern authentication and authorization prot
 
 Access tokens are credentials used to access protected resources. They represent the authorization granted to the client.
 
-> 💡 **Best Practice**: Keep access tokens short-lived (1 hour or less) to minimize the impact of token compromise.
+> **Best Practice**: Keep access tokens short-lived (1 hour or less) to minimize the impact of token compromise.
 
 #### Properties
 - Short-lived (typically 1 hour)
@@ -47,9 +47,9 @@ Access tokens are credentials used to access protected resources. They represent
 
 Refresh tokens are credentials used to obtain new access tokens when they expire.
 
-> 💡 **Best Practice**: Store refresh tokens in secure, encrypted storage and never expose them to the client-side code.
+> **Best Practice**: Store refresh tokens in secure, encrypted storage and never expose them to the client-side code.
 > 
-> ⚠️ **Security Note**: Implement refresh token rotation to detect and prevent token theft.
+> **Security Note**: Implement refresh token rotation to detect and prevent token theft.
 
 #### Properties
 - Long-lived (days to months)
@@ -71,7 +71,7 @@ ID tokens contain user identity information and are specific to OpenID Connect.
 
 Understanding the OAuth token lifecycle is crucial for implementing secure authentication and authorization.
 
-> 💡 **Best Practice**: Implement proper token validation at every step:
+> **Best Practice**: Implement proper token validation at every step:
 > - Validate signature and claims
 > - Check expiration time
 > - Verify issuer and audience
@@ -220,13 +220,13 @@ class TokenManager {
 
 The Authorization Code Flow is the most secure and widely-used OAuth 2.0 grant type for web applications and native apps.
 
-> 💡 **Best Practice**: For web applications:
+> **Best Practice**: For web applications:
 > - Use PKCE (Proof Key for Code Exchange) even if not using a public client
 > - Generate a cryptographically secure state parameter
 > - Validate state parameter on return
 > - Use short-lived authorization codes (max 5 minutes)
 >
-> ⚠️ **Security Note**: Never store client secrets in browser-accessible locations or client-side code.
+> **Security Note**: Never store client secrets in browser-accessible locations or client-side code.
 
 ```mermaid
 sequenceDiagram
@@ -268,13 +268,13 @@ public class AuthorizationCodeFlow {
 
 The Client Credentials Flow represents the simplest OAuth 2.0 grant type, designed specifically for machine-to-machine (M2M) communication.
 
-> 💡 **Best Practice**: For service-to-service communication:
+> **Best Practice**: For service-to-service communication:
 > - Use certificates instead of client secrets when possible
 > - Implement regular credential rotation
 > - Use managed identities in cloud environments
 > - Limit scope of service accounts to minimum required permissions
 >
-> ⚠️ **Security Note**: Store client credentials in secure vaults or environment variables, never in source code.
+> **Security Note**: Store client credentials in secure vaults or environment variables, never in source code.
 
 ```mermaid
 sequenceDiagram
@@ -328,13 +328,13 @@ sequenceDiagram
 
 ### Token Storage
 
-> 💡 **Best Practice**: Follow these storage guidelines:
+> **Best Practice**: Follow these storage guidelines:
 > - Access Tokens: Store in memory only
 > - Refresh Tokens: Use secure HTTP-only cookies or secure storage
 > - Never store in localStorage or sessionStorage
 > - Clear tokens on logout
 >
-> ⚠️ **Security Note**: Implement proper CORS policies and use SameSite cookie attributes.
+> **Security Note**: Implement proper CORS policies and use SameSite cookie attributes.
 
 #### Secure Token Storage Examples
 
@@ -408,7 +408,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 ### Token Validation
 
-> 💡 **Best Practice**: Implement comprehensive token validation:
+> **Best Practice**: Implement comprehensive token validation:
 > - Use well-tested libraries for JWT validation
 > - Validate all claims including nbf (not before) and exp (expiration)
 > - Implement JWK rotation and caching
@@ -575,7 +575,7 @@ public class TokenValidator {
 
 #### 1. Token Management
 
-> 💡 **Best Practice**: Implement proper token lifecycle management
+> **Best Practice**: Implement proper token lifecycle management
 > ```typescript
 > // TypeScript - Token Manager with automatic refresh
 > class TokenManager {
@@ -638,7 +638,7 @@ public class TokenValidator {
 
 #### 2. Error Handling
 
-> 💡 **Best Practice**: Implement robust error handling
+> **Best Practice**: Implement robust error handling
 > ```java
 > @ControllerAdvice
 > public class TokenExceptionHandler {
@@ -682,7 +682,7 @@ public class TokenValidator {
 
 #### 3. Security Headers
 
-> 💡 **Best Practice**: Implement security headers
+> **Best Practice**: Implement security headers
 > ```java
 > // Java - Spring Security headers configuration
 > @Configuration
@@ -740,7 +740,7 @@ public class TokenValidator {
 
 ## Development and Troubleshooting Tools
 
-> 💡 **Best Practice**: Use specialized tools for debugging and testing OAuth flows to save time and reduce security risks.
+> **Best Practice**: Use specialized tools for debugging and testing OAuth flows to save time and reduce security risks.
 
 ### Token Inspection and Debugging
 
@@ -925,11 +925,11 @@ const server = new MockOAuth({
       grant_type: "refresh_token"
 ```
 
-> ⚠️ **Security Note**: Always use these tools in development or testing environments only. Never use them to inspect or modify production traffic.
+> **Security Note**: Always use these tools in development or testing environments only. Never use them to inspect or modify production traffic.
 
 ## Azure Workload Identity Authentication
 
-> 💡 **Best Practice**: Use Workload Identity Federation instead of service principals with secrets whenever possible to improve security and reduce secret management overhead.
+> **Best Practice**: Use Workload Identity Federation instead of service principals with secrets whenever possible to improve security and reduce secret management overhead.
 
 ### Overview
 
@@ -1110,7 +1110,7 @@ class SecretManager {
 
 ### Best Practices for Workload Identity
 
-> 💡 **Best Practice**: Follow these guidelines for secure workload identity implementation:
+> **Best Practice**: Follow these guidelines for secure workload identity implementation:
 > - Use separate identities for different workloads
 > - Implement least-privilege access
 > - Regular credential rotation
@@ -1152,7 +1152,7 @@ az monitor diagnostic-settings create \
 
 ### Troubleshooting Workload Identity
 
-> 💡 **Best Practice**: Common troubleshooting steps:
+> **Best Practice**: Common troubleshooting steps:
 > 1. Verify federation setup
 > 2. Check token claims
 > 3. Validate RBAC assignments
@@ -1171,4 +1171,786 @@ az monitor log-analytics query \
     --query "SignInLogs | where AppId == '<app-id>'"
 ```
 
+### Migration Checklist
+
+> **Best Practice**: Follow this checklist when migrating from service principals to workload identity:
+> 1. Update token endpoints
+> 2. Convert resources to scopes
+> 3. Update token validation logic
+> 4. Update libraries (ADAL to MSAL)
+> 5. Test token acquisition flows
+> 6. Verify token claims handling
+> 7. Update security policies
+
+```powershell
+# PowerShell - Check app registration version
+Get-AzureADApplication -ObjectId "<app-id>" | Select-Object -ExpandProperty PublicClient
+
+# Check if app is configured for v2.0
+Get-AzureADApplication -ObjectId "<app-id>" | 
+    Select-Object -ExpandProperty OAuth2AllowImplicitFlow
+```
+
+## Azure AD Endpoints: v1.0 vs v2.0
+
+> **Best Practice**: Use v2.0 endpoints for new applications. Only use v1.0 if you have specific legacy requirements.
+
+### Configuring Code Flow for v2.0 Tokens
+
+> **Best Practice**: Always use v2.0 tokens with PKCE for new applications.
+
+#### 1. Application Registration Configuration
+
+```powershell
+# PowerShell - Create v2.0 app registration
+az ad app create --display-name "my-v2-app" `
+    --sign-in-audience "AzureADandPersonalMicrosoftAccount" `
+    --web-redirect-uris "https://myapp.com/callback" `
+    --enable-id-token-issuance true
+
+# Configure app for Code Flow
+az ad app update --id "<app-id>" `
+    --required-resource-accesses '[
+        {
+            "resourceAppId": "00000003-0000-0000-c000-000000000000",
+            "resourceAccess": [
+                {
+                    "id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
+                    "type": "Scope"
+                }
+            ]
+        }
+    ]'
+```
+
+#### 2. Authentication Configuration
+
+```csharp
+// C# - MSAL configuration for v2.0 tokens
+var config = new ConfidentialClientApplicationOptions
+{
+    Instance = "https://login.microsoftonline.com/",
+    TenantId = "<tenant-id>",
+    ClientId = "<client-id>",
+    ClientSecret = "<client-secret>",
+    RedirectUri = "https://myapp.com/callback"
+};
+
+var app = ConfidentialClientApplicationBuilder
+    .CreateWithApplicationOptions(config)
+    .Build();
+
+// Define v2.0 scopes
+var scopes = new[] { 
+    "https://graph.microsoft.com/User.Read",
+    "offline_access"  // For refresh tokens
+};
+
+// Authorization URL
+var authUrl = await app.GetAuthorizationRequestUrl(scopes)
+    .WithPkce()  // Add PKCE
+    .WithPrompt(Prompt.SelectAccount)
+    .ExecuteAsync();
+
+// Handle callback and get v2.0 tokens
+public async Task<AuthenticationResult> HandleCallbackAsync(string code)
+{
+    try
+    {
+        return await app.AcquireTokenByAuthorizationCode(
+            scopes,
+            code)
+            .WithPkce()
+            .ExecuteAsync();
+    }
+    catch (MsalException ex)
+    {
+        // Handle token acquisition errors
+        throw;
+    }
+}
+```
+
+#### 3. Framework-Specific Configurations
+
+##### ASP.NET Core
+
+```csharp
+// Startup.cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+        .AddMicrosoftIdentityWebApp(options =>
+        {
+            Configuration.Bind("AzureAd", options);
+            
+            // Configure for v2.0 endpoint
+            options.Authority = "https://login.microsoftonline.com/{tenant}/v2.0";
+            
+            // Configure scopes for v2.0 tokens
+            options.Scope.Add("https://graph.microsoft.com/User.Read");
+            options.Scope.Add("offline_access");
+            
+            // Response type for Code Flow
+            options.ResponseType = OpenIdConnectResponseType.Code;
+            
+            // Enable PKCE
+            options.UsePkce = true;
+        });
+}
+```
+
+##### Node.js with Passport
+
+```javascript
+// JavaScript - Passport.js configuration
+const config = {
+    auth: {
+        clientId: "<client-id>",
+        authority: "https://login.microsoftonline.com/<tenant>/v2.0",
+        clientSecret: "<client-secret>",
+        redirectUri: "http://localhost:3000/auth/callback"
+    }
+};
+
+const strategy = new OIDCStrategy({
+    identityMetadata: `${config.auth.authority}/.well-known/openid-configuration`,
+    clientID: config.auth.clientId,
+    clientSecret: config.auth.clientSecret,
+    responseType: 'code',
+    responseMode: 'form_post',
+    redirectUrl: config.auth.redirectUri,
+    scope: ['https://graph.microsoft.com/User.Read', 'offline_access'],
+    usePKCE: true
+}, async (iss, sub, profile, accessToken, refreshToken, done) => {
+    try {
+        // Token is already v2.0 format
+        return done(null, {
+            profile,
+            accessToken,
+            refreshToken
+        });
+    } catch (err) {
+        return done(err);
+    }
+});
+```
+
+#### 4. Validating v2.0 Tokens
+
+```typescript
+// TypeScript - Token validation for v2.0
+interface V2TokenValidationOptions {
+    issuer: string;
+    audience: string;
+    clockSkew?: number;
+}
+
+class V2TokenValidator {
+    constructor(private options: V2TokenValidationOptions) {}
+
+    async validateToken(token: string): Promise<boolean> {
+        try {
+            const decoded = jwt.decode(token, { complete: true });
+            
+            // Check v2.0 specific claims
+            if (decoded.payload.ver !== '2.0') {
+                throw new Error('Not a v2.0 token');
+            }
+
+            // Validate issuer (v2.0 format)
+            const expectedIssuer = 
+                `https://login.microsoftonline.com/${this.options.issuer}/v2.0`;
+            if (decoded.payload.iss !== expectedIssuer) {
+                throw new Error('Invalid issuer');
+            }
+
+            // Validate scopes (v2.0 format)
+            const scopes = decoded.payload.scp?.split(' ') || [];
+            if (!this.validateScopes(scopes)) {
+                throw new Error('Invalid scopes');
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Token validation failed:', error);
+            return false;
+        }
+    }
+
+    private validateScopes(scopes: string[]): boolean {
+        // Implement scope validation logic
+        return scopes.length > 0;
+    }
+}
+```
+
+#### 5. Troubleshooting v2.0 Tokens
+
+```powershell
+# PowerShell - Check v2.0 endpoint configuration
+az ad app show --id "<app-id>" --query "signInAudience"
+
+# Check configured v2.0 scopes
+az ad app show --id "<app-id>" --query "requiredResourceAccess[].resourceAccess[].{Type:type, Id:id}"
+```
+
+Common issues and solutions:
+
+```text
+Error: AADSTS70011: The provided request must include a 'scope' input parameter
+Solution: Ensure you're using scope format for v2.0 (e.g., 'https://graph.microsoft.com/User.Read')
+
+Error: AADSTS65001: The user or administrator has not consented to use the application
+Solution: Admin consent may be required for some v2.0 scopes
+
+Error: AADSTS700082: The refresh token has expired due to inactivity
+Solution: Implement proper refresh token handling with the 'offline_access' scope
+```
+
+> **Best Practice**: When implementing v2.0 tokens:
+> 1. Always use PKCE
+> 2. Request minimum required scopes
+> 3. Implement proper refresh token handling
+> 4. Validate tokens according to v2.0 specifications
+> 5. Use the correct scope format
+
+### Overview of Differences
+
+| Feature | v1.0 Endpoint | v2.0 Endpoint |
+|---------|--------------|---------------|
+| Token Endpoint | `https://login.microsoftonline.com/{tenant}/oauth2/token` | `https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token` |
+| Authorization Endpoint | `https://login.microsoftonline.com/{tenant}/oauth2/authorize` | `https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize` |
+| Token Format | JWT with specific claims | JWT with additional claims and modern formats |
+| Scope Format | Resources (`https://graph.microsoft.com`) | Permission-based (`https://graph.microsoft.com/User.Read`) |
+| App Registration | Azure Portal (App Registrations - Legacy) | Azure Portal (App Registrations) |
+| Microsoft Account Support | No | Yes |
+| Conditional Access | Limited | Full Support |
+
+### Token Comparison
+
+#### v1.0 Token Example
+```json
+{
+    "aud": "https://service.contoso.com",
+    "iss": "https://sts.windows.net/contoso.onmicrosoft.com/",
+    "iat": 1524575731,
+    "nbf": 1524575731,
+    "exp": 1524579631,
+    "ver": "1.0",
+    "tid": "contoso.onmicrosoft.com",
+    "amr": ["pwd"],
+    "roles": ["Admin", "User"],
+    "oid": "11111111-1111-1111-1111-111111111111"
+}
+```
+
+#### v2.0 Token Example
+```json
+{
+    "aud": "https://service.contoso.com",
+    "iss": "https://login.microsoftonline.com/contoso.onmicrosoft.com/v2.0",
+    "iat": 1524575731,
+    "nbf": 1524575731,
+    "exp": 1524579631,
+    "ver": "2.0",
+    "tid": "contoso.onmicrosoft.com",
+    "azp": "application-id",
+    "scp": "User.Read Directory.ReadWrite.All",
+    "sub": "user-subject-id",
+    "oid": "11111111-1111-1111-1111-111111111111",
+    "preferred_username": "user@contoso.com",
+    "groups": ["group1", "group2"],
+    "roles": ["Admin", "User"]
+}
+```
+
+### Implementation Examples
+
+#### v1.0 Implementation
+
+```csharp
+// C# - ADAL (Azure AD v1.0)
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+
+public class AuthenticationService
+{
+    private readonly string _authority;
+    private readonly string _clientId;
+    private readonly string _resource;
+
+    public AuthenticationService(string tenant)
+    {
+        _authority = $"https://login.microsoftonline.com/{tenant}";
+        _clientId = "your-client-id";
+        _resource = "https://graph.microsoft.com";
+    }
+
+    public async Task<AuthenticationResult> GetTokenAsync()
+    {
+        var authContext = new AuthenticationContext(_authority);
+        var credential = new ClientCredential(_clientId, "client-secret");
+        
+        return await authContext.AcquireTokenAsync(
+            _resource,
+            credential);
+    }
+}
+```
+
+#### v2.0 Implementation
+
+```csharp
+// C# - MSAL (Microsoft Identity Platform v2.0)
+using Microsoft.Identity.Client;
+
+public class TokenService
+{
+    private readonly string _authority;
+    private readonly string _clientId;
+    private readonly string[] _scopes;
+
+    public TokenService(string tenant)
+    {
+        _authority = $"https://login.microsoftonline.com/{tenant}/v2.0";
+        _clientId = "your-client-id";
+        _scopes = new[] { "https://graph.microsoft.com/.default" };
+    }
+
+    public async Task<AuthenticationResult> GetTokenAsync()
+    {
+        var app = ConfidentialClientApplicationBuilder
+            .Create(_clientId)
+            .WithAuthority(_authority)
+            .WithClientSecret("client-secret")
+            .Build();
+        
+        return await app.AcquireTokenForClient(_scopes)
+            .ExecuteAsync();
+    }
+}
+```
+
+### Migration Examples
+
+#### From v1.0 to v2.0
+
+```javascript
+// JavaScript - Migrating from ADAL.js to MSAL.js
+// Old v1.0 code
+const adalConfig = {
+    clientId: "your-client-id",
+    tenant: "your-tenant",
+    endpoints: {
+        graphApiEndpoint: "https://graph.microsoft.com"
+    }
+};
+const authContext = new AuthenticationContext(adalConfig);
+
+// New v2.0 code
+const msalConfig = {
+    auth: {
+        clientId: "your-client-id",
+        authority: "https://login.microsoftonline.com/your-tenant/v2.0",
+        redirectUri: "your-redirect-uri"
+    }
+};
+const msalInstance = new PublicClientApplication(msalConfig);
+
+// Old v1.0 token acquisition
+authContext.acquireToken(
+    "https://graph.microsoft.com",
+    (error, token) => {
+        if (!error) {
+            // Use token
+        }
+    }
+);
+
+// New v2.0 token acquisition
+const result = await msalInstance.acquireTokenSilent({
+    scopes: ["https://graph.microsoft.com/User.Read"]
+});
+```
+
+### Best Practices for Version Selection
+
+> **Best Practice**: Consider these factors when choosing between v1.0 and v2.0:
+> - Use v2.0 for new applications
+> - Use v2.0 if you need Microsoft Account support
+> - Use v2.0 for better security features
+> - Consider v1.0 only if you have legacy dependencies
+
+### Common Issues and Solutions
+
+#### v1.0 Issues
+```text
+AADSTS70001: Application with identifier 'client_id' was not found
+Solution: Verify the application is registered in the correct Azure AD tenant
+```
+
+#### v2.0 Issues
+```text
+AADSTS65001: The user or administrator has not consented to use the application
+Solution: Ensure all required scopes are consented to during authorization
+```
+
+### Migration Checklist
+
+> **Best Practice**: Follow this checklist when migrating from v1.0 to v2.0:
+> 1. Update token endpoints
+> 2. Convert resources to scopes
+> 3. Update token validation logic
+> 4. Update libraries (ADAL to MSAL)
+> 5. Test token acquisition flows
+> 6. Verify token claims handling
+> 7. Update security policies
+
+```powershell
+# PowerShell - Check app registration version
+Get-AzureADApplication -ObjectId "<app-id>" | Select-Object -ExpandProperty PublicClient
+
+# Check if app is configured for v2.0
+Get-AzureADApplication -ObjectId "<app-id>" | 
+    Select-Object -ExpandProperty OAuth2AllowImplicitFlow
+```
+
+## Token Validation Without Introspection
+
+> **Best Practice**: Implement a comprehensive validation strategy that includes signature verification, claims validation, and revocation checking.
+
+### JWT Validation Approaches
+
+#### 1. Local Token Validation
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API
+    participant Cache
+    participant KeyStore
+    
+    Client->>API: Request with JWT
+    API->>API: 1. Decode JWT Header
+    API->>KeyStore: 2. Get Public Key (by kid)
+    KeyStore->>Cache: 3. Check Cache
+    Cache-->>KeyStore: 4. Return Cached Key
+    KeyStore-->>API: 5. Return Public Key
+    API->>API: 6. Verify Signature
+    API->>API: 7. Validate Claims
+    API-->>Client: 8. Response
+```
+
+#### 2. Distributed Cache for Revocation
+
+```mermaid
+sequenceDiagram
+    participant API
+    participant Redis
+    participant Auth
+    
+    Auth->>Redis: 1. Store Revoked Token
+    API->>API: 2. Validate JWT
+    API->>Redis: 3. Check if Revoked
+    Redis-->>API: 4. Revocation Status
+    API->>API: 5. Process Request
+```
+
+### Implementation Examples
+
+#### Basic JWT Validation
+
+```csharp
+// C# - Complete JWT validation
+public class TokenValidator
+{
+    private readonly IMemoryCache _cache;
+    private readonly HttpClient _httpClient;
+    private readonly string _issuer;
+    private readonly string _audience;
+
+    public async Task<bool> ValidateTokenAsync(string token)
+    {
+        try
+        {
+            // 1. Basic JWT format validation
+            var handler = new JwtSecurityTokenHandler();
+            var jwt = handler.ReadJwtToken(token);
+
+            // 2. Check expiration
+            if (jwt.ValidTo < DateTime.UtcNow)
+                return false;
+
+            // 3. Get signing keys
+            var signingKeys = await GetSigningKeysAsync(jwt.Header.Kid);
+
+            // 4. Validate signature and claims
+            var parameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKeys = signingKeys,
+                ValidateIssuer = true,
+                ValidIssuer = _issuer,
+                ValidateAudience = true,
+                ValidAudience = _audience,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.FromMinutes(2)
+            };
+
+            handler.ValidateToken(token, parameters, out _);
+
+            // 5. Check revocation
+            if (await IsTokenRevokedAsync(jwt.Id))
+                return false;
+
+            return true;
+        } catch
+        {
+            return false;
+        }
+    }
+
+    private async Task<bool> IsTokenRevokedAsync(string tokenId)
+    {
+        // Check distributed cache for revocation
+        return await _cache.GetOrDefaultAsync<bool>($"revoked_token_{tokenId}");
+    }
+}
+```
+
+#### Distributed Revocation Check
+
+```java
+// Java - Redis-based revocation check
+@Service
+public class TokenRevocationService {
+    private final RedisTemplate<String, String> redisTemplate;
+    private static final String REVOKED_PREFIX = "revoked_token:";
+    
+    public void revokeToken(String tokenId, long expirationInSeconds) {
+        String key = REVOKED_PREFIX + tokenId;
+        redisTemplate.opsForValue().set(key, "revoked", 
+            Duration.ofSeconds(expirationInSeconds));
+    }
+    
+    public boolean isTokenRevoked(String tokenId) {
+        String key = REVOKED_PREFIX + tokenId;
+        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
+    }
+    
+    // Cleanup expired entries
+    @Scheduled(fixedRate = 3600000) // Run every hour
+    public void cleanupExpiredTokens() {
+        Set<String> keys = redisTemplate.keys(REVOKED_PREFIX + "*");
+        if (keys != null) {
+            keys.forEach(key -> {
+                if (!redisTemplate.hasKey(key)) {
+                    redisTemplate.delete(key);
+                }
+            });
+        }
+    }
+}
+```
+
+#### Public Key Caching
+
+```typescript
+// TypeScript - JWKS caching implementation
+interface JwksCache {
+    keys: JsonWebKey[];
+    lastUpdated: number;
+}
+
+class JwksProvider {
+    private cache: JwksCache | null = null;
+    private readonly cacheTimeMs = 24 * 60 * 60 * 1000; // 24 hours
+    private readonly jwksUri: string;
+
+    constructor(jwksUri: string) {
+        this.jwksUri = jwksUri;
+    }
+
+    async getSigningKey(kid: string): Promise<JsonWebKey> {
+        const keys = await this.getKeys();
+        const key = keys.find(k => k.kid === kid);
+        if (!key) {
+            throw new Error(`No signing key found for kid: ${kid}`);
+        }
+        return key;
+    }
+
+    private async getKeys(): Promise<JsonWebKey[]> {
+        if (this.shouldRefreshCache()) {
+            await this.refreshCache();
+        }
+        return this.cache!.keys;
+    }
+
+    private shouldRefreshCache(): boolean {
+        return !this.cache || 
+            Date.now() - this.cache.lastUpdated > this.cacheTimeMs;
+    }
+
+    private async refreshCache(): Promise<void> {
+        try {
+            const response = await fetch(this.jwksUri);
+            const jwks = await response.json();
+            this.cache = {
+                keys: jwks.keys,
+                lastUpdated: Date.now()
+            };
+        } catch (error) {
+            if (this.cache) {
+                // Use expired cache if refresh fails
+                console.warn('Failed to refresh JWKS cache', error);
+            } else {
+                throw error;
+            }
+        }
+    }
+}
+```
+
+### Best Practices for Token Validation
+
+> **Best Practice**: Implement these validation steps:
+> 1. Verify token format and signature
+> 2. Validate standard claims (exp, nbf, iss, aud)
+> 3. Check custom claims and scopes
+> 4. Implement revocation checking
+> 5. Cache validation results
+> 6. Handle clock skew
+
+### Performance Optimization
+
+```csharp
+// C# - Cached token validation
+public class CachedTokenValidator
+{
+    private readonly IMemoryCache _cache;
+    private readonly TimeSpan _validationCacheDuration = TimeSpan.FromMinutes(5);
+
+    public async Task<bool> ValidateTokenAsync(string token)
+    {
+        // Generate cache key (careful with token size)
+        var cacheKey = $"token_validation_{ComputeHash(token)}";
+
+        return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = _validationCacheDuration;
+
+            // Perform full validation
+            var isValid = await PerformFullValidation(token);
+            
+            // Cache duration should not exceed token expiration
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+            var timeToExpiration = jwt.ValidTo - DateTime.UtcNow;
+            if (timeToExpiration < _validationCacheDuration)
+            {
+                entry.AbsoluteExpirationRelativeToNow = timeToExpiration;
+            }
+
+            return isValid;
+        });
+    }
+
+    private string ComputeHash(string token)
+    {
+        using var sha = SHA256.Create();
+        var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(token));
+        return Convert.ToBase64String(hash);
+    }
+}
+```
+
+### Handling Token Revocation
+
+> **Best Practice**: Implement these revocation strategies:
+> 1. Use short token expiration times
+> 2. Maintain a distributed revocation list
+> 3. Implement token versioning
+> 4. Use token binding when possible
+
+```java
+// Java - Token versioning example
+@Service
+public class TokenVersionManager {
+    private final RedisTemplate<String, Integer> redisTemplate;
+    private static final String VERSION_PREFIX = "token_version:";
+
+    public void incrementUserTokenVersion(String userId) {
+        String key = VERSION_PREFIX + userId;
+        redisTemplate.opsForValue().increment(key);
+    }
+
+    public boolean isValidTokenVersion(String userId, int tokenVersion) {
+        String key = VERSION_PREFIX + userId;
+        Integer currentVersion = redisTemplate.opsForValue().get(key);
+        return currentVersion != null && tokenVersion >= currentVersion;
+    }
+}
+```
+
+### Error Handling
+
+```typescript
+// TypeScript - Comprehensive token validation error handling
+class TokenValidationError extends Error {
+    constructor(
+        public readonly code: string,
+        message: string,
+        public readonly details?: any
+    ) {
+        super(message);
+        this.name = 'TokenValidationError';
+    }
+}
+
+async function validateToken(token: string): Promise<void> {
+    try {
+        const decoded = jwt.decode(token, { complete: true });
+        if (!decoded) {
+            throw new TokenValidationError(
+                'INVALID_FORMAT',
+                'Token is not in valid JWT format'
+            );
+        }
+
+        // Signature verification
+        try {
+            await verifySignature(decoded);
+        } catch (error) {
+            throw new TokenValidationError(
+                'INVALID_SIGNATURE',
+                'Token signature is invalid',
+                error
+            );
+        }
+
+        // Claims validation
+        const now = Math.floor(Date.now() / 1000);
+        if (decoded.payload.exp && decoded.payload.exp < now) {
+            throw new TokenValidationError(
+                'TOKEN_EXPIRED',
+                'Token has expired',
+                { expiry: new Date(decoded.payload.exp * 1000) }
+            );
+        }
+
+        // Additional validations...
+    } catch (error) {
+        if (error instanceof TokenValidationError) {
+            throw error;
+        }
+        throw new TokenValidationError(
+            'VALIDATION_FAILED',
+            'Token validation failed',
+            error
+        );
+    }
+}
+```
+
+```
 {{ ... }}
