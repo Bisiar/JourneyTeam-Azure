@@ -1,0 +1,19 @@
+{
+    "name": "v2-token-demo",
+    "version": "1.0.0",
+    "description": "Microsoft Entra ID v2.0 Token Sample",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "dev": "nodemon app.js"
+    },
+    "dependencies": {
+        "@azure/msal-node": "^2.1.0",
+        "axios": "^1.6.2",
+        "express": "^4.18.2",
+        "express-session": "^1.17.3"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.2"
+    }
+}
