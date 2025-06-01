@@ -308,6 +308,41 @@ You can use the MCP server directly from any terminal location to update tasks b
    - Simply restart Claude Desktop after configuration changes
    - Use natural language: "Update task by ID" rather than JSON-RPC calls
 
+### Multi-Tenant Support
+
+The DevOps MCP server now supports multiple Azure DevOps organizations with 4-character customer codes:
+
+**Configuration Example:**
+```json
+{
+  "mcpServers": {
+    "sherpai-devops": {
+      "command": "dotnet",
+      "args": ["run", "--project", "/path/to/SherpAI.MCP.DevOps.csproj"],
+      "env": {
+        "TENANT_CONFIG": "{\"JTOP\":{\"Organization\":\"https://dev.azure.com/JT-Ops\",\"Project\":\"JourneyTeam\",\"PersonalAccessToken\":\"pat1\"},\"NCNP\":{\"Organization\":\"https://dev.azure.com/Ncneuropsych\",\"Project\":\"ProjectName\",\"PersonalAccessToken\":\"pat2\"},\"ORDS\":{\"Organization\":\"https://dev.azure.com/OurDigitalSolution\",\"Project\":\"ProjectName\",\"PersonalAccessToken\":\"pat3\"}}",
+        "DEFAULT_TENANT": "JTOP"
+      }
+    }
+  }
+}
+```
+
+**Usage Examples:**
+```
+"Get my NCNP tasks" → queries Ncneuropsych tenant
+"List JTOP sprint items" → queries JT-Ops tenant  
+"Update ORDS work item 12345 to done" → updates in OurDigitalSolution tenant
+"Show me my tasks" → uses default tenant (JTOP)
+```
+
+**Customer Code Mapping:**
+- `JTOP` → JT-Ops (JourneyTeam)
+- `NCNP` → Ncneuropsych  
+- `ORDS` → OurDigitalSolution
+
+The system automatically extracts customer codes from natural language queries, so you can simply say "Get my NCNP tasks" and it will route to the correct tenant.
+
 ## Azure Developer CLI (azd) Setup
 
 ### Installation
