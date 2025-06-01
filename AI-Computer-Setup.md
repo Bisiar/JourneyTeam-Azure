@@ -343,6 +343,44 @@ The DevOps MCP server now supports multiple Azure DevOps organizations with 4-ch
 
 The system automatically extracts customer codes from natural language queries, so you can simply say "Get my NCNP tasks" and it will route to the correct tenant.
 
+## Using the DevOps MCP Server
+
+### Primary Usage: Claude Desktop with MCP
+
+The DevOps MCP server is designed to work through Claude Desktop using natural language:
+
+**How It Actually Works:**
+1. You ask Claude: "Get my NCNP tasks"
+2. Claude uses the `sherpai-devops` MCP server automatically
+3. The server extracts "NCNP" from your message and routes to the correct tenant
+4. You get real Azure DevOps data back
+
+**Real Usage Examples:**
+```
+"List my current sprint tasks"           → Default JTOP tenant
+"Get my NCNP tasks"                     → Routes to Ncneuropsych
+"Show me ORDS work item 12345"          → Routes to OurDigitalSolution  
+"Query active bugs assigned to me"       → Default JTOP tenant
+"Update work item 284580 to done"       → Default JTOP tenant
+```
+
+### Alternative: GitHub Copilot Integration
+
+GitHub Copilot provides the same DevOps integration capabilities through workspace commands:
+
+**GitHub Copilot Workspace Commands:**
+```
+@workspace Run: dotnet run --project src/SherpAI.MCP.DevOps -- query my-items NCNP
+@workspace Run: dotnet run --project src/SherpAI.MCP.DevOps -- get-item 12345 ORDS
+@workspace What work items are assigned to me in the current sprint?
+```
+
+**Same Capabilities:**
+- Identical .NET DevOpsService logic
+- Full multi-tenant support with customer codes
+- Direct access to real Azure DevOps data
+- Native VS Code integration
+
 ## Azure Developer CLI (azd) Setup
 
 ### Installation
@@ -875,6 +913,739 @@ public async Task DevOpsService_Should_Connect_To_Real_Azure_DevOps()
    - **Reduced debugging time** with real integration tests
    - **Faster feature delivery** with AI assistance
    - **Lower maintenance overhead** with standardized tooling
+
+## Complete Configuration Files
+
+### Global Claude Configuration
+
+Create `~/CLAUDE.md` with your global development standards:
+
+<details>
+<summary>Click to expand complete ~/CLAUDE.md file</summary>
+
+```markdown
+# Claude Global Development Configuration
+
+This document outlines my general development standards and preferences for all projects.
+
+## Language & Framework Preferences
+
+- **Primary Language**: C# (.NET 8/9)
+- **Architecture**: Onion Architecture (Domain-Driven Design)
+- **UI Pattern**: MVVM (Model-View-ViewModel)
+- **Testing Framework**: xUnit with high code coverage focus
+- **Deployment**: Azure Developer CLI (`azd up`) - repeatable deployments only
+
+## Architecture Principles
+
+### Onion Architecture Layers
+1. **Domain** - Core business logic and entities
+2. **Application** - Use cases and application services
+3. **Infrastructure** - External concerns (DB, APIs, etc.)
+4. **API/Functions** - Entry points (REST APIs, Azure Functions)
+5. **UI (Blazor)** - MVVM pattern with ViewModels
+
+### MVVM Implementation
+- **Minimal code-behind**: Keep `.razor.cs` files lean
+- **ViewModels**: All logic resides in testable ViewModels
+- **Data Binding**: Use two-way binding where appropriate
+- **Separation of Concerns**: Views handle presentation only
+
+## Development Standards
+
+### Code Organization
+- **One class per file**: Every class must have its own file
+- **Naming conventions**: Follow C# naming standards
+- **Folder structure**: Match namespace hierarchy
+- **Package Management**: Central Package Management (Directory.Packages.props)
+
+### Testing Requirements
+- **Integration Tests**: Required for all features
+- **Code Coverage**: Aim for maximum coverage
+- **Test Organization**: Mirror source structure in test projects
+- **Test Naming**: `MethodName_StateUnderTest_ExpectedBehavior`
+
+### Documentation
+- **Location**: All documentation goes in `/wiki` folder within each project
+- **Format**: Azure DevOps Wiki compatible markdown
+- **Diagrams**: Use `:::mermaid` blocks (not ```mermaid)
+
+Example:
+:::mermaid
+graph TD
+    A[Client] --> B[API]
+    B --> C[Domain]
+:::
+
+## Task Management
+
+### Task Tracking
+- **Task Files**: Document all work in `/wiki/tasks/YYYY-MM-DD-TaskName.md`
+- **Console Logging**: Record all command inputs and outputs
+- **Progress Tracking**: Update task status regularly
+
+### Task File Template
+```markdown
+# Task Name
+
+**Date**: YYYY-MM-DD  
+**Status**: In Progress | Completed  
+**Priority**: High | Medium | Low  
+
+## Objective
+[Clear description of what needs to be accomplished]
+
+## Console Log
+```bash
+$ command input
+> command output
+```
+
+## Notes
+[Any relevant observations or decisions]
+```
+
+## MCP Server Configuration
+
+### CRITICAL: ALWAYS USE MCP TOOLS FIRST!
+**Before answering any question about the tools below, YOU MUST:**
+1. Check if an MCP tool is available for that topic
+2. Use the MCP tool to get accurate, up-to-date information
+3. Only rely on general knowledge if MCP tools are unavailable
+
+**Failure to use available MCP tools is unacceptable when they are specifically configured for accuracy.**
+
+### Available Global MCP Servers
+
+#### 1. Telerik Blazor Assistant (`telerik_blazor_assistant`)
+**Purpose**: Assistance with Telerik UI for Blazor components  
+**Tools**: Component documentation, code examples, best practices  
+**Configuration**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+#### 2. Azure MCP Server (`azure-mcp-server`)
+**Purpose**: Azure resource management and operations  
+**Tools**: Resource creation, management, monitoring  
+**INCLUDES**: Azure CLI (`az`) commands, Azure Developer CLI (`azd`) commands, authentication methods, service principal usage  
+**USE THIS FOR**: Any questions about Azure CLI syntax, azd commands, authentication, deployments  
+**Configuration**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+#### 3. GitHub MCP Server (`github-mcp-server`)
+**Purpose**: GitHub repository interactions  
+**Tools**: Repository management, PR operations, issue tracking  
+**Configuration**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+#### 4. Figma MCP Server (`figma-mcp-server`)
+**Purpose**: Figma design file interactions  
+**Tools**: Access to Figma files and design assets  
+**Configuration**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+#### 5. Context7 MCP (`context7-mcp`)
+**Purpose**: Context management and persistence across conversations  
+**Tools**: Store and retrieve context between sessions  
+**Configuration**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+### Project-Specific MCP Servers
+
+These are configured per project in the project's CLAUDE.md file.
+
+## MCP Troubleshooting
+
+### When MCP Tools Are Not Available
+
+If MCP tools are not showing up in Claude:
+
+1. **Check Claude Desktop Logs**
+   ```bash
+   # macOS log location
+   ~/Library/Logs/Claude/
+   ```
+
+2. **Verify MCP Server Configuration**
+   - Open `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - Ensure JSON is valid (no syntax errors)
+   - Check all paths are absolute and correct
+   - Verify environment variables are set
+
+3. **Common Issues & Solutions**
+
+   **Server Not Loading:**
+   - Restart Claude Desktop completely (Quit and reopen)
+   - Check if the server binary/script exists at the configured path
+   - For .NET servers: Ensure the DLL exists after building
+   - For npm servers: Check if the package is installed globally
+
+   **Authentication Errors:**
+   - Verify API keys and tokens are valid
+   - Check token expiration dates
+   - Ensure proper permissions/scopes
+
+   **Server Crashes:**
+   - Check server logs (usually in stderr)
+   - For .NET: Run `dotnet build` to ensure no compilation errors
+   - Test server manually in terminal to see error messages
+
+4. **Testing MCP Servers Manually**
+
+   **For .NET MCP servers:**
+   ```bash
+   cd /path/to/mcp/server
+   echo '{"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"1.0.0","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}},"id":1}' | dotnet run
+   ```
+
+   **For Node.js MCP servers:**
+   ```bash
+   echo '{"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"1.0.0","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}},"id":1}' | npx @org/mcp-server
+   ```
+
+5. **Debugging Steps**
+   - Use Claude's Command Palette (Cmd+K) to reload MCP servers
+   - Check which tools are loaded using a Task tool to list MCP tools
+   - Verify server output is JSON-RPC compliant (logs to stderr, responses to stdout)
+
+6. **Context7 Specific Issues**
+   - Ensure Upstash/Smithery key is valid
+   - Check internet connectivity (Context7 requires online access)
+   - Verify the key format in the args: `--key YOUR-KEY-HERE`
+
+## Deployment Process
+
+### Azure Deployment
+- **Tool**: Azure Developer CLI (`azd`)
+- **Command**: `azd up` (no manual deployments)
+- **Infrastructure**: Bicep files in `/infra` folder
+- **Environment**: Configured via `.azure` folder
+
+### Deployment Checklist
+1. Run all tests: `dotnet test`
+2. Check linting: `dotnet format --verify-no-changes`
+3. Update version numbers if needed
+4. Deploy: `azd up`
+5. Verify deployment in Azure Portal
+
+## Best Practices
+
+### General Guidelines
+1. **Always follow C# best practices**
+2. **Write self-documenting code**
+3. **Keep methods small and focused**
+4. **Use dependency injection**
+5. **Implement proper error handling**
+6. **Log appropriately (structured logging)**
+
+### Git Workflow
+1. **Feature branches**: `feature/description`
+2. **Commit messages**: Clear and descriptive
+3. **Pull requests**: Required for all changes
+4. **Code reviews**: Mandatory before merge
+
+### Security
+1. **No secrets in code**: Use Key Vault or environment variables
+2. **Authentication**: Use managed identities where possible
+3. **Authorization**: Implement proper RBAC
+4. **Input validation**: Always validate user input
+
+## Standard Project Structure
+
+```
+/src
+  /[Project].Domain          # Core business logic
+  /[Project].Application     # Use cases
+  /[Project].Infrastructure  # External services
+  /[Project].API            # REST API
+  /[Project].Functions      # Azure Functions
+  /[Project].Blazor         # UI (MVVM)
+/tests
+  /[Project].UnitTests
+  /[Project].IntegrationTests
+  /[Project].FunctionTests
+/wiki
+  /architecture           # Architecture decisions
+  /guides                # How-to guides
+  /tasks                 # Task tracking
+/infra                    # Azure Bicep files
+```
+
+## Common Commands
+
+```bash
+# Build solution
+dotnet build
+
+# Run tests
+dotnet test
+
+# Run specific project
+dotnet run --project src/Project.API
+
+# Deploy to Azure
+azd up
+
+# Format code
+dotnet format
+
+# Add package (with Central Package Management)
+# 1. Add PackageReference to project without version:
+dotnet add package PackageName --no-restore
+# 2. Add PackageVersion to Directory.Packages.props
+# 3. Restore packages
+dotnet restore
+```
+
+## Central Package Management
+
+All my projects use Central Package Management with:
+- **Directory.Packages.props** - Contains all package versions
+- **Directory.Build.props** - Common build properties
+- **ManagePackageVersionsCentrally** - Set to true
+
+### Adding a Package
+1. Add to project file: `<PackageReference Include="PackageName" />`
+2. Add to Directory.Packages.props: `<PackageVersion Include="PackageName" Version="LATEST" />`
+3. Run `dotnet restore`
+
+### Package Version Policy
+- **ALWAYS use the latest stable version**
+- **If only preview/beta exists, use the latest preview**
+- **NEVER downgrade a package version**
+- **When updating, update ALL packages to latest**
+
+### Benefits
+- Consistent versions across all projects
+- Single location for version updates
+- Prevents version conflicts
+- Easier dependency management
+
+## CRITICAL BUILD RULE
+
+### ALWAYS BUILD AFTER CHANGES
+**This is a mandatory practice that MUST be followed:**
+
+1. **After every file edit**: Run `dotnet build` on the specific project
+2. **After multiple related changes**: Run `dotnet build` on the entire solution  
+3. **Before marking tasks complete**: Ensure full solution builds successfully
+4. **Before committing code**: Always verify the build is clean
+
+### Build Commands by Scope
+```bash
+# Single project build (after editing one project)
+dotnet build src/ProjectName/ProjectName.csproj
+
+# Solution build (after multiple project changes)
+dotnet build
+
+# With clean (when package references change)
+dotnet clean && dotnet build
+
+# Full restore and build (when major changes made)
+dotnet restore && dotnet build
+```
+
+### Build Failure Protocol
+1. **Read error messages carefully** - Don't guess solutions
+2. **Fix compilation errors first** - Before any other issues
+3. **One error at a time** - Don't try to fix multiple issues simultaneously
+4. **Verify fix by rebuilding** - After each fix attempt
+5. **Document build issues** - In task files if complex
+
+### Memory: Build Verification Rule
+**NEVER proceed to the next task or mark a task complete without:**
+1. Successfully building the affected project(s)
+2. Successfully building the entire solution if multiple projects were changed
+3. Documenting any build failures and their resolutions in task files
+
+**This prevents cascading errors and ensures code quality at every step.**
+
+## Project Locations
+
+### Active Projects
+- **SherpAI**: `/Users/james/Source/jt-ops.visualstudio.com/jt-ops/jtp/jt-ai-sherpai/`
+- **EIRS TrainMonitoring**: `/Users/james/Source/bisiar.visualstudio.com/EIRS/`
+
+## Learning from Mistakes
+
+### Example: Azure CLI Authentication (2025-05-30)
+**Mistake**: When asked about `azd auth login` with service principal, I incorrectly stated it wasn't possible and suggested only environment variables.
+**Reality**: `azd auth login --client-id <id> --client-secret <secret> --tenant-id <tenant>` works perfectly.
+**Lesson**: ALWAYS use the Azure MCP Server to verify Azure/azd commands before responding. The MCP tools exist specifically to prevent outdated or incorrect information.
+
+### Example: Not Building Solution After Changes (2025-05-30)
+**Mistake**: Made multiple changes to projects without building the full solution to verify everything works together.
+**Reality**: Individual project builds can succeed while the solution has integration issues.
+**Lesson**: ALWAYS build the entire solution after making changes across multiple projects. This catches dependency issues, package conflicts, and integration problems early.
+
+### Rules to Prevent Future Mistakes
+1. **Tool Questions = MCP First**: Any question about a tool (Azure, GitHub, etc.) requires checking MCP tools FIRST
+2. **Verify Before Stating**: Never say something is "not possible" without checking MCP tools
+3. **Research > Memory**: Your MCP tools have real-time, accurate information. Use them over memory
+4. **Admit Uncertainty**: If MCP tools aren't available, clearly state you're using general knowledge that may be outdated
+5. **Build After Every Change**: Always verify builds after code changes, especially across multiple projects
+
+---
+
+*Last Updated: 2025-05-30*
+```
+</details>
+
+### Project-Specific Claude Configuration
+
+For each project, create a `CLAUDE.md` file in the project root. Here's the SherpAI example:
+
+<details>
+<summary>Click to expand complete project CLAUDE.md file</summary>
+
+```markdown
+# SherpAI Project Configuration
+
+This document outlines project-specific configurations for the SherpAI solution. For global development preferences, see `~/CLAUDE.md`.
+
+## AI Development Rules
+
+1. **Certainty over speculation** - Research code before making changes
+2. **Incremental approach** - Small, testable changes only
+3. **Keep it simple** - No over-complicated solutions
+4. **Follow best practices** - Use established patterns
+5. **Research → Plan → Implement → Test** - Always in this order
+6. **Latest packages only** - NEVER downgrade. Always use the latest version available
+
+## Project Overview
+
+- **Name**: SherpAI - AI Agent Platform
+- **Repository**: Azure DevOps - JT-Ops/JourneyTeam
+- **Type**: Multi-agent AI system with Azure Functions and Blazor UI
+- **Architecture**: Onion Architecture with Domain-Driven Design
+
+## Project-Specific Architecture
+
+### AI Agent Architecture
+- **DevOps Agent**: Integrates with Azure DevOps for work item management
+- **AI Foundry Integration**: Uses Azure AI Foundry for model deployment
+- **MCP Protocol**: Implements Model Context Protocol for tool interactions
+- **Orchestrator Pattern**: Central orchestrator manages agent communication
+
+### Key Components
+1. **SherpAI.Functions**: Azure Functions hosting agents and orchestrator
+2. **SherpAI.MCP.DevOps**: MCP server for DevOps interactions
+3. **SherpAI.Agents.DevOps**: Core DevOps agent implementation
+4. **SherpAI.Blazor**: MVVM-based UI for agent interactions
+
+## Environment Configuration
+
+### Required Environment Variables
+```bash
+AZURE_DEVOPS_PAT="your-pat-token"
+AZURE_DEVOPS_ORG="https://dev.azure.com/JT-Ops"
+AZURE_DEVOPS_PROJECT="JourneyTeam"
+AZURE_OPENAI_ENDPOINT="https://cog-sherpai-dev.openai.azure.com/"
+AZURE_OPENAI_KEY="your-key"
+AZURE_OPENAI_DEPLOYMENT="gpt-4o"
+```
+
+### Local Development Settings
+- **Functions**: `src/SherpAI.Functions/local.settings.json`
+- **API**: `src/SherpAI.API/appsettings.Development.json`
+- **Tests**: `tests/SherpAI.IntegrationTests/appsettings.test.json`
+
+## MCP Server Configuration
+
+### Available MCP Servers
+
+#### 1. SherpAI DevOps MCP (`sherpai-devops`)
+**Purpose**: Interact with Azure DevOps work items  
+**Location**: `/Users/james/Source/jt-ops.visualstudio.com/jt-ops/jtp/jt-ai-sherpai/src/SherpAI.MCP.DevOps/`  
+**Configuration**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+**Available Tools**:
+- `list_work_items` - List work items with WIQL queries
+  - Presets: 'my-items', 'active-bugs', 'current-sprint'
+- `get_work_item` - Get specific work item details by ID
+- `query_work_items` - Execute custom WIQL queries
+
+**Multi-Tenant Support**:
+- **Customer Codes**: JTOP (JT-Ops), NCNP (Ncneuropsych), ORDS (OurDigitalSolution)
+- **Automatic Routing**: Extracts customer codes from natural language
+- **Usage**: "Get my NCNP tasks" routes to Ncneuropsych tenant
+
+**Usage Examples**:
+```
+"List my current sprint tasks"
+"Get details of work item 12345"
+"Query active bugs assigned to me"
+"Get my NCNP tasks"
+"Update ORDS work item 67890 to done"
+```
+
+### MCP Server Setup
+1. Build the server: `dotnet build`
+2. Configure in `~/Library/Application Support/Claude/claude_desktop_config.json`
+3. Restart Claude Desktop
+4. Verify tools are available
+
+## Deployment Process
+
+### Azure Deployment
+- **Tool**: Azure Developer CLI (`azd`)
+- **Command**: `azd up` (no manual deployments)
+- **Infrastructure**: Defined in `/infra` folder using Bicep
+- **Environment**: Configured via `.azure` folder
+
+### Deployment Checklist
+1. Run all tests: `dotnet test`
+2. Check linting: `dotnet format --verify-no-changes`
+3. Update version numbers if needed
+4. Deploy: `azd up`
+5. Verify deployment in Azure Portal
+
+## Azure Resources
+
+### Resource Group: `rg-sherpai-dev`
+- **AI Foundry Hub**: `aihub-sherpai-dev`
+- **AI Foundry Project**: `aiproj-sherpai-dev`
+- **Storage Account**: `stsherpaidev`
+- **App Service Plan**: `plan-sherpai-dev`
+- **Function App**: `func-sherpai-dev`
+- **Key Vault**: `kv-sherpai-dev`
+
+### Deployment
+```bash
+# Deploy all resources
+azd up
+
+# Deploy only infrastructure
+azd provision
+
+# Deploy only code
+azd deploy
+```
+
+## Project Structure
+
+**Base Path**: `/Users/james/Source/jt-ops.visualstudio.com/jt-ops/jtp/jt-ai-sherpai/`
+
+```
+/Users/james/Source/jt-ops.visualstudio.com/jt-ops/jtp/jt-ai-sherpai/
+  /src
+    /SherpAI.Domain          # Core business logic
+    /SherpAI.Application     # Use cases
+    /SherpAI.Infrastructure  # External services
+    /SherpAI.API            # REST API
+    /SherpAI.Functions      # Azure Functions
+    /SherpAI.Blazor         # UI (MVVM)
+    /SherpAI.MCP.DevOps     # MCP Server
+  /tests
+    /SherpAI.UnitTests
+    /SherpAI.IntegrationTests
+    /SherpAI.FunctionTests
+  /wiki
+    /architecture           # Architecture decisions
+    /guides                # How-to guides
+    /tasks                 # Task tracking
+  /infra                    # Azure Bicep files
+```
+
+## Common Commands
+
+```bash
+# Build solution
+dotnet build
+
+# Run tests
+dotnet test
+
+# Run specific project
+dotnet run --project src/SherpAI.API
+
+# Deploy to Azure
+azd up
+
+# Format code
+dotnet format
+
+# Add package (using Central Package Management)
+# 1. Add to project: dotnet add package PackageName --no-restore
+# 2. Update Directory.Packages.props with version
+# 3. dotnet restore
+
+# Build MCP server
+cd src/SherpAI.MCP.DevOps && dotnet build
+
+# Test MCP server
+dotnet run < test-input.json
+
+# Run MCP tests
+dotnet test tests/SherpAI.MCP.DevOps.Tests
+```
+
+## Central Package Management
+
+This project uses Central Package Management:
+- **Directory.Packages.props** - Root directory, all package versions
+- **Directory.Build.props** - Common properties for all projects
+- No versions in individual .csproj files
+
+## MCP Server Development
+
+### Logging Best Practices
+1. **All logs to stderr**: Console.Error.WriteLine() for .NET
+2. **JSON-RPC to stdout only**: Clean JSON responses only
+3. **Structured logging**: Use proper log levels (Trace, Debug, Info, Warning, Error)
+4. **No stdout pollution**: Never write non-JSON to stdout
+
+### Testing MCP Server
+```bash
+# Test initialization
+echo '{"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"1.0.0","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}},"id":1}' | dotnet run
+
+# Test tool listing
+echo '{"jsonrpc":"2.0","method":"tools/list","params":{},"id":2}' | dotnet run
+
+# Check if logs go to stderr and JSON to stdout
+dotnet run < test-input.json 2>error.log 1>output.json
+```
+
+## Project-Specific Notes
+
+### AI Agent Guidelines
+1. **Agent Interfaces**: All agents must implement `IAgent` interface
+2. **Tool Registration**: Use MCP attributes for tool discovery
+3. **Error Handling**: Agents should gracefully handle API failures
+4. **Logging**: Use structured logging with correlation IDs
+5. **Testing**: Use real services in integration tests (no mocking)
+
+### Performance Considerations
+- **Function Cold Starts**: Use warmup triggers for critical functions
+- **Token Limits**: Monitor OpenAI token usage
+- **Caching**: Implement caching for frequently accessed work items
+
+### Known Issues
+- MCP server requires manual restart after Claude Desktop updates
+- AI Foundry deployment requires manual agent registration
+
+---
+
+*Project Created: 2025-01-25*  
+*Last Updated: 2025-01-30*
+```
+</details>
+
+### Complete Claude Desktop Configuration
+
+Here's the complete `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
+> **⚠️ SECURITY NOTE**: All tokens and keys shown below are examples and must be replaced with your actual credentials. The example tokens will not work.
+
+<details>
+<summary>Click to expand complete Claude Desktop config</summary>
+
+```json
+{
+  "mcpServers": {
+    "telerik_blazor_assistant": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@progress/telerik-blazor-mcp"
+      ],
+      "env": {
+        "TELERIK_LICENSE_PATH": "/Users/james/.telerik/telerik-license.txt"
+      }
+    },
+    "azure-mcp-server": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@azure/mcp@latest",
+        "server",
+        "start"
+      ]
+    },
+    "github-mcp-server": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN=${GITHUB_PERSONAL_ACCESS_TOKEN}",
+        "ghcr.io/github/github-mcp-server"
+      ]
+    },
+    "figma-mcp-server": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "figma-developer-mcp",
+        "--figma-api-key=${FIGMA_API_KEY}",
+        "--stdio"
+      ]
+    },
+    "context7-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@smithery/cli@latest",
+        "run",
+        "@upstash/context7-mcp",
+        "--key",
+        "9e284e94-7708-41fd-b11a-9efe00a0f5c4"
+      ]
+    },
+    "sherpai-devops": {
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "/Users/james/Source/jt-ops.visualstudio.com/jt-ops/jtp/jt-ai-sherpai/src/SherpAI.MCP.DevOps/SherpAI.MCP.DevOps.csproj"
+      ],
+      "env": {
+        "TENANT_CONFIG": "{\"JTOP\":{\"Organization\":\"https://dev.azure.com/JT-Ops\",\"Project\":\"JourneyTeam\",\"PersonalAccessToken\":\"your-jtop-pat-token\"},\"NCNP\":{\"Organization\":\"https://dev.azure.com/Ncneuropsych\",\"Project\":\"DefaultProject\",\"PersonalAccessToken\":\"your-ncnp-pat-token\"},\"ORDS\":{\"Organization\":\"https://dev.azure.com/OurDigitalSolution\",\"Project\":\"DefaultProject\",\"PersonalAccessToken\":\"your-ords-pat-token\"}}",
+        "DEFAULT_TENANT": "JTOP"
+      }
+    }
+  }
+}
+```
+</details>
+
+### Environment Variables Setup
+
+Create a `.env` file or set system environment variables:
+
+```bash
+# Azure DevOps PAT Tokens (for different tenants)
+export JTOP_PAT="your-jt-ops-personal-access-token"
+export NCNP_PAT="your-ncneuropsych-personal-access-token" 
+export ORDS_PAT="your-ourdigitalsolution-personal-access-token"
+
+# GitHub Integration
+export GITHUB_PERSONAL_ACCESS_TOKEN="your-github-token"
+
+# Figma Integration
+export FIGMA_API_KEY="your-figma-api-key"
+
+# Azure Credentials
+export AZURE_SUBSCRIPTION_ID="your-subscription-id"
+export AZURE_TENANT_ID="your-tenant-id"
+export AZURE_CLIENT_ID="your-client-id"
+export AZURE_CLIENT_SECRET="your-client-secret"
+```
+
+### Setup Checklist
+
+1. **✅ Global Configuration**: Copy global `~/CLAUDE.md` file
+2. **✅ Project Configuration**: Copy project-specific `CLAUDE.md` to each project root
+3. **✅ Claude Desktop Config**: Update `~/Library/Application Support/Claude/claude_desktop_config.json`
+4. **✅ Environment Variables**: Set all required tokens and keys
+5. **✅ MCP Server Build**: Build custom MCP servers with `dotnet build`
+6. **✅ Restart Claude Desktop**: Reload configuration
+7. **✅ Test Tools**: Verify all MCP tools are available
+
+This complete configuration provides:
+- **Consistent development standards** across all projects
+- **Multi-tenant DevOps integration** with automatic customer code routing
+- **Comprehensive MCP server ecosystem** for all development needs
+- **Team accessibility** through GitHub Copilot integration
+- **Enterprise-grade security** with proper credential management
 
 ## Conclusion
 
