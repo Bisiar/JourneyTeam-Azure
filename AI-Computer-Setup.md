@@ -30,20 +30,57 @@ Our AI development environment consists of:
 1. **Download Claude Desktop for macOS**
    ```bash
    # Visit https://claude.ai/download and download the macOS version
-   # Or use Homebrew if available
-   brew install claude-desktop
+   # Direct download: https://claude.ai/download/macos
    ```
 
-2. **Initial Setup**
+2. **Installation Steps**
+   - Download the `.dmg` file from the official website
+   - Open the downloaded `.dmg` file
+   - Drag Claude Desktop to your Applications folder
+   - Launch Claude Desktop from Applications
+
+3. **Initial Setup**
    - Launch Claude Desktop
    - Sign in with your Anthropic account
-   - Grant necessary permissions for file access
+   - **IMPORTANT**: Grant necessary permissions for:
+     - File system access (for reading project files)
+     - Network access (for MCP server communication)
+     - Accessibility permissions (if prompted)
+
+4. **Verify Installation**
+   ```bash
+   # Check if Claude Desktop is running
+   ps aux | grep -i claude
+   
+   # Check configuration directory exists
+   ls -la "~/Library/Application Support/Claude/"
+   ```
 
 ### Configuration Location
 
 Claude Desktop configuration is stored at:
 ```bash
 ~/Library/Application Support/Claude/claude_desktop_config.json
+```
+
+**Important Configuration Notes:**
+- This file may not exist initially - you'll need to create it
+- The file must be valid JSON format
+- Any syntax errors will prevent MCP servers from loading
+- Restart Claude Desktop after making changes
+
+### Creating Initial Configuration
+
+```bash
+# Create the configuration directory if it doesn't exist
+mkdir -p "~/Library/Application Support/Claude"
+
+# Create initial configuration file
+cat > "~/Library/Application Support/Claude/claude_desktop_config.json" << 'EOF'
+{
+  "mcpServers": {}
+}
+EOF
 ```
 
 ## MCP Server Configuration
@@ -96,6 +133,17 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ### Installing Global MCP Servers
 
+**Prerequisites:**
+```bash
+# Ensure Node.js is installed (version 18 or higher)
+node --version
+npm --version
+
+# Update npm to latest version
+npm install -g npm@latest
+```
+
+**Install MCP Servers:**
 ```bash
 # Install Telerik Blazor Assistant
 npm install -g @telerik/blazor-mcp-server
@@ -111,6 +159,20 @@ npm install -g @figma/mcp-server
 
 # Install Context7 MCP
 npm install -g context7-mcp
+
+# Verify installations
+npm list -g --depth=0 | grep mcp
+```
+
+**Troubleshooting Global Installs:**
+```bash
+# If you get permission errors, fix npm permissions
+sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
+
+# Or use nvm for Node.js version management
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+nvm install --lts
+nvm use --lts
 ```
 
 ### MCP Server Capabilities
@@ -518,8 +580,30 @@ public async Task DevOpsService_Should_Connect_To_Real_Azure_DevOps()
    # Check Claude Desktop logs
    tail -f ~/Library/Logs/Claude/claude-desktop.log
    
-   # Restart Claude Desktop
-   pkill -f "Claude Desktop" && open -a "Claude Desktop"
+   # Alternative log location (if above doesn't exist)
+   tail -f ~/Library/Logs/Claude/mcp.log
+   
+   # Restart Claude Desktop completely
+   pkill -f "Claude Desktop" && sleep 2 && open -a "Claude Desktop"
+   ```
+
+2. **Validate JSON Configuration**
+   ```bash
+   # Test JSON syntax
+   python3 -m json.tool "~/Library/Application Support/Claude/claude_desktop_config.json"
+   
+   # Or use jq if installed
+   jq . "~/Library/Application Support/Claude/claude_desktop_config.json"
+   ```
+
+3. **Test MCP Server Manually**
+   ```bash
+   # Test .NET MCP server
+   cd /path/to/mcp/server
+   echo '{"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"1.0.0","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}},"id":1}' | dotnet run
+   
+   # Test Node.js MCP server
+   echo '{"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"1.0.0","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}},"id":1}' | npx your-mcp-server
    ```
 
 2. **Authentication Errors**
