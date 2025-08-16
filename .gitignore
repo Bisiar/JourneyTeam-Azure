@@ -1,1 +1,85 @@
 .DS_Store
+.claude/
+
+# Security - Never commit secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.pfx
+*.cer
+.azure/
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/*PAT*
+**/*TOKEN*
+**/*SECRET*
+**/*PASSWORD*
+
+# Ignore local configuration
+settings.local.json
+config.local.json
+*.local.json
+
+# Personal files
+.zshrc
+.bashrc
+.bash_profile
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Build outputs
+bin/
+obj/
+dist/
+build/
+out/
+
+# IDE files
+.vscode/settings.json
+.idea/
+*.suo
+*.user
+
+# Package files
+node_modules/
+packages/
+*.nupkg
+
+# Test results
+TestResults/
+coverage/
+*.trx
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Azure Functions
+local.settings.json
+__azurite_db*
+__blobstorage__
+__queuestorage__
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.Python
+
+# Backup files
+*.bak
+*.backup
+*~
