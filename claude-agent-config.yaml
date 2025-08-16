@@ -1,0 +1,202 @@
+# Claude Code Subagent Configuration
+# Aligns with Microsoft Well-Architected Framework and Azure Advanced Specializations
+# Works with existing SherpAI DevOps MCP and Context7 MCP
+
+agents:
+  # 1. Documentation Agent - Triggered by file changes
+  documentation:
+    name: "WAF Documentation Agent"
+    trigger: 
+      - "file_change"
+      - "git_hook"
+    specialization_source: "https://github.com/Bisiar/JourneyTeam-Azure/tree/main/specializations"
+    output_structure:
+      max_documents: 10
+      format: "markdown"
+    pillars:
+      - reliability
+      - security
+      - cost_optimization
+      - operational_excellence
+      - performance_efficiency
+    
+  # 2. Architecture Enforcement Agent
+  architecture:
+    name: "Onion Architecture Guardian"
+    rules:
+      domain:
+        - "No external dependencies"
+        - "Pure business logic only"
+        - "Located in: */Domain/*"
+      application:
+        - "References Domain only"
+        - "Contains interfaces"
+        - "Located in: */Application/*"
+      infrastructure:
+        - "Implements Application interfaces"
+        - "External dependencies allowed"
+        - "Located in: */Infrastructure/*"
+      presentation:
+        - "ViewModels in */Shared/* or */Contracts/*"
+        - "No business logic"
+        - "Located in: */UI/* or */Web/*"
+    violations:
+      - error: "ViewModel in Application layer"
+        fix: "Move to Shared/ViewModels or Contracts"
+      - error: "Database reference in Domain"
+        fix: "Move to Infrastructure, use repository pattern"
+      - error: "Business logic in UI"
+        fix: "Move to Application services"
+  
+  # 3. Azure Infrastructure Agent
+  azure:
+    name: "Azure Resource Naming Agent"
+    naming_rules_source: "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations"
+    patterns:
+      resource_group: "rg-{workload}-{environment}-{region}-{instance}"
+      app_service: "app-{workload}-{environment}-{instance}"
+      sql_database: "sqldb-{workload}-{environment}"
+      storage_account: "st{workload}{environment}{instance}"  # no hyphens, lowercase
+      key_vault: "kv-{workload}-{environment}"
+      function_app: "func-{workload}-{environment}-{instance}"
+    environments:
+      - dev
+      - test
+      - prod
+    bicep_template_location: "/infra"
+    
+  # 4. Code Quality Agent
+  quality:
+    name: "Audit-Ready Quality Agent"
+    checks:
+      - security_scanning
+      - dependency_vulnerabilities
+      - code_coverage_minimum: 80
+      - complexity_threshold: 10
+    tools:
+      - "dotnet test"
+      - "dotnet format"
+      - "security: dotnet list package --vulnerable"
+    
+  # 5. Audit Orchestration Agent
+  audit:
+    name: "Specialization Audit Orchestrator"
+    process:
+      1_identify: "Read project README for specialization type"
+      2_fetch: "Download relevant checklist from GitHub"
+      3_assess: "Map current documentation to audit requirements"
+      4_generate: "Create missing evidence documents"
+      5_validate: "Verify all controls are addressed"
+    evidence_format: "AUDIT_{SPECIALIZATION}_{CONTROL}_{DATE}.md"
+
+# Document Templates (6-10 max for lean approach)
+documents:
+  1_architecture:
+    name: "ARCHITECTURE.md"
+    sections:
+      - "Solution Overview"
+      - "Onion Architecture Layers"
+      - "Azure Resource Topology"
+      - "Security Boundaries"
+    waf_pillars: ["reliability", "security", "performance_efficiency"]
+    
+  2_operations:
+    name: "OPERATIONS.md"
+    sections:
+      - "Deployment Process (azd up)"
+      - "Monitoring & Alerts"
+      - "Incident Response"
+      - "Backup & Recovery"
+    waf_pillars: ["operational_excellence", "reliability"]
+    
+  3_security:
+    name: "SECURITY.md"
+    sections:
+      - "Authentication & Authorization"
+      - "Data Protection"
+      - "Network Security"
+      - "Compliance Controls"
+    waf_pillars: ["security"]
+    
+  4_performance:
+    name: "PERFORMANCE.md"
+    sections:
+      - "Performance Targets"
+      - "Scaling Strategy"
+      - "Caching Approach"
+      - "Load Testing Results"
+    waf_pillars: ["performance_efficiency"]
+    
+  5_cost:
+    name: "COST.md"
+    sections:
+      - "Resource Sizing"
+      - "Cost Estimates"
+      - "Optimization Strategies"
+      - "Budget Alerts"
+    waf_pillars: ["cost_optimization"]
+    
+  6_testing:
+    name: "TESTING.md"
+    sections:
+      - "Test Strategy"
+      - "Integration Tests"
+      - "Performance Tests"
+      - "Security Tests"
+    waf_pillars: ["reliability", "security"]
+    
+  7_deployment:
+    name: "DEPLOYMENT.md"
+    sections:
+      - "Infrastructure as Code (Bicep)"
+      - "CI/CD Pipeline"
+      - "Environment Configuration"
+      - "Rollback Procedures"
+    waf_pillars: ["operational_excellence", "reliability"]
+    
+  8_audit_evidence:
+    name: "AUDIT_EVIDENCE.md"
+    sections:
+      - "Specialization Alignment"
+      - "Control Mappings"
+      - "Customer Case Studies"
+      - "WAF Review Results"
+    waf_pillars: ["all"]
+    
+  9_readme:
+    name: "README.md"
+    sections:
+      - "Project Overview"
+      - "Specialization: {from_github}"
+      - "Quick Start (azd up)"
+      - "Architecture Summary"
+      - "Documentation Index"
+    waf_pillars: ["operational_excellence"]
+    
+  10_runbook:
+    name: "RUNBOOK.md"
+    sections:
+      - "Common Operations"
+      - "Troubleshooting"
+      - "Emergency Procedures"
+      - "Contact Information"
+    waf_pillars: ["operational_excellence", "reliability"]
+
+# Automation Hooks
+hooks:
+  pre_commit:
+    - "architecture.validate"
+    - "azure.validate_naming"
+    - "quality.run_tests"
+  
+  post_commit:
+    - "documentation.update"
+    - "audit.check_compliance"
+  
+  pre_deploy:
+    - "azure.validate_bicep"
+    - "security.scan"
+  
+  post_deploy:
+    - "documentation.update_endpoints"
+    - "audit.generate_evidence"
