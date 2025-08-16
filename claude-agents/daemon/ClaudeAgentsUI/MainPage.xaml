@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ClaudeAgentsUI.MainPage"
+             Title="Claude Agents Monitor"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+    <Grid Padding="20" RowDefinitions="Auto,Auto,*,Auto">
+        
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Claude Agents Daemon"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+            
+            <Label Text="{Binding StatusMessage}"
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   TextColor="{Binding StatusColor}" />
+        </VerticalStackLayout>
+
+        <!-- Agent Status Cards -->
+        <Grid Grid.Row="1" Margin="0,20" 
+              ColumnDefinitions="*,*,*,*"
+              ColumnSpacing="10">
+            
+            <!-- Documentation Agent -->
+            <Frame Grid.Column="0" 
+                   BackgroundColor="{Binding DocumentationAgent.BackgroundColor}"
+                   BorderColor="{Binding DocumentationAgent.BorderColor}"
+                   Padding="10">
+                <VerticalStackLayout>
+                    <Label Text="📚" FontSize="30" HorizontalOptions="Center" />
+                    <Label Text="Documentation" FontSize="12" HorizontalOptions="Center" />
+                    <Label Text="{Binding DocumentationAgent.Status}" 
+                           FontSize="10" 
+                           HorizontalOptions="Center"
+                           TextColor="{Binding DocumentationAgent.StatusColor}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Architecture Agent -->
+            <Frame Grid.Column="1"
+                   BackgroundColor="{Binding ArchitectureAgent.BackgroundColor}"
+                   BorderColor="{Binding ArchitectureAgent.BorderColor}"
+                   Padding="10">
+                <VerticalStackLayout>
+                    <Label Text="🏛️" FontSize="30" HorizontalOptions="Center" />
+                    <Label Text="Architecture" FontSize="12" HorizontalOptions="Center" />
+                    <Label Text="{Binding ArchitectureAgent.Status}"
+                           FontSize="10"
+                           HorizontalOptions="Center"
+                           TextColor="{Binding ArchitectureAgent.StatusColor}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Azure Agent -->
+            <Frame Grid.Column="2"
+                   BackgroundColor="{Binding AzureAgent.BackgroundColor}"
+                   BorderColor="{Binding AzureAgent.BorderColor}"
+                   Padding="10">
+                <VerticalStackLayout>
+                    <Label Text="☁️" FontSize="30" HorizontalOptions="Center" />
+                    <Label Text="Azure" FontSize="12" HorizontalOptions="Center" />
+                    <Label Text="{Binding AzureAgent.Status}"
+                           FontSize="10"
+                           HorizontalOptions="Center"
+                           TextColor="{Binding AzureAgent.StatusColor}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Audit Agent -->
+            <Frame Grid.Column="3"
+                   BackgroundColor="{Binding AuditAgent.BackgroundColor}"
+                   BorderColor="{Binding AuditAgent.BorderColor}"
+                   Padding="10">
+                <VerticalStackLayout>
+                    <Label Text="✅" FontSize="30" HorizontalOptions="Center" />
+                    <Label Text="Audit" FontSize="12" HorizontalOptions="Center" />
+                    <Label Text="{Binding AuditAgent.Status}"
+                           FontSize="10"
+                           HorizontalOptions="Center"
+                           TextColor="{Binding AuditAgent.StatusColor}" />
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+
+        <!-- Event Log -->
+        <Frame Grid.Row="2" Padding="10">
+            <Grid RowDefinitions="Auto,*">
+                <Label Grid.Row="0" 
+                       Text="Event Log" 
+                       FontSize="18" 
+                       FontAttributes="Bold"
+                       Margin="0,0,0,10" />
+                
+                <ScrollView Grid.Row="1">
+                    <CollectionView ItemsSource="{Binding Events}"
+                                    VerticalOptions="FillAndExpand">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="5" 
+                                      ColumnDefinitions="100,100,*"
+                                      BackgroundColor="{Binding BackgroundColor}">
+                                    <Label Grid.Column="0" 
+                                           Text="{Binding Timestamp, StringFormat='{0:HH:mm:ss}'}"
+                                           FontSize="12"
+                                           TextColor="{Binding TextColor}" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Agent}"
+                                           FontSize="12"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding AgentColor}" />
+                                    <Label Grid.Column="2"
+                                           Text="{Binding Message}"
+                                           FontSize="12"
+                                           TextColor="{Binding TextColor}" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+            </Grid>
+        </Frame>
+
+        <!-- Control Buttons -->
+        <HorizontalStackLayout Grid.Row="3" 
+                               Spacing="10" 
+                               HorizontalOptions="Center">
+            <Button Text="Start Daemon"
+                    Command="{Binding StartDaemonCommand}"
+                    IsEnabled="{Binding CanStart}"
+                    BackgroundColor="Green"
+                    TextColor="White"
+                    WidthRequest="120" />
+            
+            <Button Text="Stop Daemon"
+                    Command="{Binding StopDaemonCommand}"
+                    IsEnabled="{Binding CanStop}"
+                    BackgroundColor="Red"
+                    TextColor="White"
+                    WidthRequest="120" />
+            
+            <Button Text="Clear Log"
+                    Command="{Binding ClearLogCommand}"
+                    BackgroundColor="Gray"
+                    TextColor="White"
+                    WidthRequest="120" />
+            
+            <Button Text="Run Audit"
+                    Command="{Binding RunAuditCommand}"
+                    IsEnabled="{Binding IsRunning}"
+                    BackgroundColor="Blue"
+                    TextColor="White"
+                    WidthRequest="120" />
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>
