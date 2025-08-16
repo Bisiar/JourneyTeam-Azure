@@ -30,7 +30,9 @@ Our AI development environment consists of:
 1. **Download Claude Desktop for macOS**
    ```bash
    # Visit https://claude.ai/download and download the macOS version
-   # Direct download: https://claude.ai/download/macos
+   # Direct download: https://claude.ai/download
+
+   npm install -g @anthropic-ai/claude-code
    ```
 
 2. **Installation Steps**
