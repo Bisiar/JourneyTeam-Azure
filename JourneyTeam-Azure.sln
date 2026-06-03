@@ -1,0 +1,32 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "claude-agents", "claude-agents", "{D3CE9385-8701-2795-BDE0-2EF69589AA19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "daemon", "daemon", "{00F3DE10-5E9B-AE9B-C4FF-4CCC420438B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClaudeAgentsUI", "claude-agents\daemon\ClaudeAgentsUI\ClaudeAgentsUI.csproj", "{7255BE18-9F38-F0D4-A182-330A1EBDCC81}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7255BE18-9F38-F0D4-A182-330A1EBDCC81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7255BE18-9F38-F0D4-A182-330A1EBDCC81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7255BE18-9F38-F0D4-A182-330A1EBDCC81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7255BE18-9F38-F0D4-A182-330A1EBDCC81}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{00F3DE10-5E9B-AE9B-C4FF-4CCC420438B9} = {D3CE9385-8701-2795-BDE0-2EF69589AA19}
+		{7255BE18-9F38-F0D4-A182-330A1EBDCC81} = {00F3DE10-5E9B-AE9B-C4FF-4CCC420438B9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7DE0907F-63CD-4F63-AA83-09FE1942A2E4}
+	EndGlobalSection
+EndGlobal
